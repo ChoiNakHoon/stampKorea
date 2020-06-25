@@ -1,9 +1,11 @@
 from django.contrib.auth.models import AbstractUser
+from django_countries.fields import CountryField
 from django.db import models
 
 # migration 이후 필드 추가 할 떄마다 default 값이 필요
 # default 값은 넣거나 혹은 NULL=TRUE 설정해서 값을 알려주고 migrations
 class User(AbstractUser):
+
     """ User Model Definition """
 
     GENDER_MALE = "male"
@@ -53,7 +55,7 @@ class User(AbstractUser):
         (LOGIN_FACEBOOK, "Facebook"),
         (LOGIN_NAVER, "Naver"),
     )
-
+    country = CountryField(blank=True)
     avatar = models.ImageField(upload_to="avatars", blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
     bio = models.TextField(blank=True)

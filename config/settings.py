@@ -40,13 +40,21 @@ DJANGO_APPS = [
 
 # Project Application definition
 PROJECT_APPS = [
+    "core.apps.CoreConfig",
     "users.apps.UsersConfig",
+    "places.apps.PlacesConfig",
+    "reviews.apps.ReviewsConfig",
+    "lists.apps.ListsConfig",
+    "conversations.apps.ConversationsConfig",
 ]
 
 # library Application definition
+THIRD_PARTY_APPS = [
+    "django_countries",
+]
 
 # Installed Application definition
-INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -122,4 +130,9 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+# 인증에 사용할 커스텀 User 모델 지정 : '앱이름.모델명'
 AUTH_USER_MODEL = "users.User"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+
+MEDIA_URL = "/media/"

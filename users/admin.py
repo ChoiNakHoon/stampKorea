@@ -18,6 +18,7 @@ class CustomUserAdmin(UserAdmin):
                     "gender",
                     "bio",
                     "birthdate",
+                    "country",
                     "language",
                     "currency",
                     "login_method",
