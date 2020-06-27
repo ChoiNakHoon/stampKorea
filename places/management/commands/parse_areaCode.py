@@ -48,7 +48,6 @@ class Command(BaseCommand):
 
                     if region is not None:
                         if int(region.code) == area_code:
-                            print("지역 코드가 존재 합니다.")
                             print(region.code)
                             if region.code == "8":
                                 sub_region = place_models.Sub_Region.objects.create(
@@ -62,7 +61,6 @@ class Command(BaseCommand):
                             code=area_code, name=area_name
                         )
                         region.save()
-                        print("성공")
                 self.stdout.write(self.style.SUCCESS("places created!"))
             else:
                 print(response.get("response").get("header").get("resultMsg"))
@@ -88,11 +86,8 @@ def AreaCode_Sub(code, rows, key):
             items = body.get("items").get("item")
 
             for i in range(len(items)):
-                area_code = defaultdict(list)
-                area_name = defaultdict(list)
                 area_code = items[i].get("code")
                 area_name = items[i].get("name")
-                print(area_code)
                 region = place_models.Region.objects.filter(code=code).first()
                 try:
                     sub_region = place_models.Sub_Region.objects.get(
@@ -106,6 +101,4 @@ def AreaCode_Sub(code, rows, key):
         else:
             print(response.get("response").get("header").get("resultMsg"))
     except ApiException as e:
-        print("에러났나요?")
         raise ApiException()
-

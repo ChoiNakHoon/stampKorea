@@ -37,23 +37,8 @@ class Sub_Region(core_models.TimeStampedModel):
 class Cat_Type(core_models.TimeStampedModel):
     """ Cat Type Item """
 
-    CAT_TYPE_A01 = "A01"
-    CAT_TYPE_A02 = "A02"
-    CAT_TYPE_A03 = "A03"
-    CAT_TYPE_A04 = "A04"
-    CAT_TYPE_A05 = "A05"
-    CAT_TYPE_B02 = "B02"
-
-    CAT_TYPE_CHOICES = (
-        (CAT_TYPE_A01, "Nature"),
-        (CAT_TYPE_A02, "Culture/Art/History"),
-        (CAT_TYPE_A03, "Leisure/Sports"),
-        (CAT_TYPE_A04, "Shopping"),
-        (CAT_TYPE_A05, "Cuisine"),
-        (CAT_TYPE_B02, "Accommodation"),
-    )
-
-    name = models.CharField(choices=CAT_TYPE_CHOICES, max_length=20)
+    code = models.CharField(max_length=4, null=True, blank=True)
+    name = models.CharField(max_length=20)
 
     class Meta:
         verbose_name = "Cat Type"
