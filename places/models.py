@@ -1,3 +1,4 @@
+from collections import defaultdict
 from django.db import models
 from core import models as core_models
 
@@ -6,6 +7,7 @@ class Region(core_models.TimeStampedModel):
     """ Region Item """
 
     # 지역 코드
+    code = models.CharField(max_length=4, null=True, blank=True)
     name = models.CharField(max_length=80)
 
     class Meta:
@@ -22,6 +24,7 @@ class Sub_Region(core_models.TimeStampedModel):
     region = models.ForeignKey(
         "Region", related_name="region", on_delete=models.CASCADE
     )
+    code = models.CharField(max_length=4, null=True, blank=True)
     name = models.CharField(max_length=80)
 
     class Meta:
@@ -91,6 +94,7 @@ class Place(core_models.TimeStampedModel):
     """ Place Model Definition """
 
     # 공통정보
+    content_id = models.CharField(max_length=20, null=True, blank=True)
     title = models.CharField(max_length=120)
     address = models.CharField(max_length=255)
     overview = models.TextField()

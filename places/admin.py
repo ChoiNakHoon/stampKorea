@@ -8,10 +8,7 @@ from . import models
 class ItemAdmin(admin.ModelAdmin):
     """ Item Admin Definition """
 
-    list_display = ("name", "used_by")
-
-    def used_by(self, obj):
-        return obj.places.count()
+    pass
 
 
 @admin.register(models.Sub_Info)
@@ -92,6 +89,7 @@ class PlaceAdmin(admin.ModelAdmin):
     count_photos.short_description = "Photo Count"
 
     def region_title(self, obj):
+        print(obj)
         return f"{obj.region_sub.region.name} - {obj.region_sub.name}"
 
     region_title.short_description = "Region"
