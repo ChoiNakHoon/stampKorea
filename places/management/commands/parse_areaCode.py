@@ -1,5 +1,4 @@
 import os
-import math
 import requests
 from django.core.management.base import BaseCommand
 from django.db.models import Q
@@ -51,7 +50,7 @@ class Command(BaseCommand):
                             print(region.code)
                             if region.code == "8":
                                 sub_region = place_models.Sub_Region.objects.create(
-                                    region=region, name=region.name, code=region.code
+                                    region=region, name=region.name, code=1
                                 )
                                 sub_region.save()
                             else:
