@@ -1,5 +1,5 @@
-from collections import defaultdict
 from django.db import models
+from django.urls import reverse
 from core import models as core_models
 
 
@@ -31,7 +31,7 @@ class Sub_Region(core_models.TimeStampedModel):
         verbose_name_plural = "Town/City"
 
     def __str__(self):
-        return f"{self.region.name} - {self.name}"
+        return self.name
 
 
 class Cat_Type(core_models.TimeStampedModel):
@@ -248,6 +248,9 @@ class Place(core_models.TimeStampedModel):
     def __str__(self):
         return f"{self.title} - {self.region} : {self.region_sub}"
 
+    def get_absolute_url(self):
+        return reverse("places:detail", kwargs={"pk": self.pk})
+
     # 전체 별점 평균 구하기
     def total_rating(self):
         all_reviews = self.reviews.all()
@@ -259,6 +262,19 @@ class Place(core_models.TimeStampedModel):
         return 0
 
     total_rating.short_description = ".Avg"
+
+    # 각 place에서 첫번째 사진을 가져 옵니다.
+    def first_photo(self):
+        try:
+            (photo,) = self.photos.all()[:1]  # unpacking list
+            return photo.url
+        except ValueError:
+            return None
+
+    # place에 4장의 사진을 가져 옵니다.
+    def get_next_four_photo(self):
+        photo = self.photos.all()[1:5]
+        return photo
 
     # 현재 장소를 유저가 선택한 수를 구한다.
     def get_likes_count(self):

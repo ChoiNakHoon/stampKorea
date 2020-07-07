@@ -4,11 +4,29 @@ from django.utils.html import mark_safe
 from . import models
 
 
-@admin.register(models.Cat_Type, models.Region, models.Sub_Region)
+@admin.register(models.Cat_Type, models.Sub_Region)
 class ItemAdmin(admin.ModelAdmin):
     """ Item Admin Definition """
 
     pass
+
+
+class CityInfoInline(admin.TabularInline):
+    """ City Info Inline Definition """
+
+    model = models.Sub_Region
+
+
+@admin.register(models.Region)
+class RegionAdmin(admin.ModelAdmin):
+    """ Region Admin Definition """
+
+    inlines = (CityInfoInline,)
+
+    list_display = (
+        "name",
+        "code",
+    )
 
 
 @admin.register(models.Sub_Info)
@@ -188,6 +206,7 @@ class PlaceAdmin(admin.ModelAdmin):
         "region_title",
         "get_likes_count",
         "total_rating",
+        "content_type",
     )
 
     list_filter = (
@@ -196,7 +215,12 @@ class PlaceAdmin(admin.ModelAdmin):
         "cat_type",
     )
 
-    search_fields = ("^region", "^region_sub", "^title", "^cat_type")
+    search_fields = (
+        "^region",
+        "^region_sub",
+        "^title",
+        "^cat_type",
+    )
 
     def count_photos(self, obj):
         return obj.photos.count()

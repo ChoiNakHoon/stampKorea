@@ -70,6 +70,7 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS("places created!"))
             else:
                 print(response.get("response").get("header").get("resultMsg"))
+                raise ApiException()
         except ApiException as e:
             print(e)
             raise ApiException()
@@ -77,6 +78,7 @@ class Command(BaseCommand):
 
 def detailCommon(content_type, content_id):
     print(f"detailCommon type = {content_type} // id = {content_id}")
+
     try:
         api_request = requests.get(
             f"http://api.visitkorea.or.kr/openapi/service/rest/EngService/detailCommon?serviceKey={API_KEY}&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=StampKorea&contentId={content_id}&countentTypeId={content_type}&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json"
@@ -92,7 +94,9 @@ def detailCommon(content_type, content_id):
             areacode = items.get("areacode")
             sigungucode = items.get("sigungucode")
             cat1 = items.get("cat1")
-            if areacode is None:
+            if cat1 is None and content_type == "85":
+                cat1 = "A02"
+            if areacode is None or sigungucode is None:
                 region = place_models.Region.objects.get(code=1)
                 sub_region = place_models.Sub_Region.objects.get(
                     Q(region__code=1) & Q(code=777)
@@ -127,10 +131,10 @@ def detailCommon(content_type, content_id):
                         )
                 except place_models.Place.DoesNotExist:
                     print("다시 시도하세요")
-            else:
+            elif areacode == 39 and sigungucode is None:
                 region = place_models.Region.objects.get(code=areacode)
                 sub_region = place_models.Sub_Region.objects.get(
-                    Q(region__code=region.code) & Q(code=sigungucode)
+                    Q(region__code=region.code) & Q(code=1)
                 )
                 main_images = items.get("firstimage")
                 cat_type = place_models.Cat_Type.objects.get(code=cat1)
@@ -162,7 +166,50 @@ def detailCommon(content_type, content_id):
                         )
                 except place_models.Place.DoesNotExist:
                     print("다시 시도하세요")
+            elif areacode and sigungucode is not None:
+                region = place_models.Region.objects.get(code=areacode)
 
+                try:
+                    sub_region = place_models.Sub_Region.objects.get(
+                        Q(region__code=region.code) & Q(code=sigungucode)
+                    )
+                except place_models.Sub_Region.DoesNotExist:
+                    print("다시 시도하세요")
+                    print(body)
+                main_images = items.get("firstimage")
+                cat_type = place_models.Cat_Type.objects.get(code=cat1)
+                try:
+                    place = place_models.Place.objects.get(content_id=content_id)
+                    place.title = items.get("title")
+                    place.address = items.get("addr1")
+                    place.overview = items.get("overview")
+                    place.directions = items.get("directions")
+                    place.tel = items.get("tel")
+                    place.mapy = items.get("mapx")
+                    place.mapx = items.get("mapy")
+                    place.zipcode = items.get("zipcode")
+                    place.region = region
+                    place.region_sub = sub_region
+                    place.cat_type = cat_type
+                    place.created_time = items.get("createdtime")
+                    place.updated_time = items.get("modifiedtime")
+                    place.homepage = items.get("homepage")
+                    place.save()
+
+                    try:
+                        photos = place_models.Photo.objects.get(url=main_images)
+                        if photos.url == main_images:
+                            print("메인 이미지가 존재합니다.")
+                    except place_models.Photo.DoesNotExist:
+                        place_models.Photo.objects.create(
+                            caption=items.get("title"), url=main_images, place=place,
+                        )
+                except place_models.Place.DoesNotExist:
+                    print("다시 시도하세요")
+            else:
+                print("에러 발생!!")
+                print(body)
+                raise ApiException()
         else:
             print(response.get("response").get("header").get("resultMsg"))
 
