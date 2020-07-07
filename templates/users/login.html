@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block page_title %} Login {% endblock page_title %}
+
+{% block content %}
+    <div>
+        {% include "mixins/auth/auth_form.html" with form=form cta="Log in" %}
+        <div>
+            <span>Don't have account?</span>
+            <a href="#">Sign up</a>
+        </div>
+    </div>    
+{% endblock content %}
+    

@@ -35,8 +35,6 @@ class HomeView(ListView):
 
         page_range = paginator.page_range[start_index:end_index]
         context["page_range"] = page_range
-        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        print(f"메인 페이지 {context}")
         return context
 
 
