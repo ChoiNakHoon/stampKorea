@@ -1,6 +1,11 @@
-from django.shortcuts import reverse
+import uuid
+from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractUser
 from django_countries.fields import CountryField
+from django.shortcuts import reverse
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.db import models
 
 # migration 이후 필드 추가 할 떄마다 default 값이 필요
@@ -79,3 +84,27 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse("users:profile", kwargs={"pk": self.pk})
 
+    # 메일 인증 하기 위한 메소드
+    # uuid로 key값을 생성하여 secret 변수에 넣음
+    def verify_email(self):
+        print("here")
+        if self.email_verified is False:
+            secret = uuid.uuid4().hex[:20]
+            # email_secret에 secret값을 넣음
+            self.email_secret = secret
+            print(self.email_secret)
+            # 그리고 sendmail로 인증 메일을 보냄.
+            html_message = render_to_string(
+                "emails/verify_email.html", {"secret": secret}
+            )
+            send_mail(
+                "Verify Stamp Korea Account",  # 제목
+                strip_tags(html_message),  # 인증 링크
+                settings.EMAIL_HOST_USER,  # 보내는 이메일 주소
+                [self.email],  # 받는 이메일 주소
+                fail_silently=False,  # 에러 여부
+                html_message=html_message,
+            )
+            self.save()
+            print(self.email_secret)
+        return
