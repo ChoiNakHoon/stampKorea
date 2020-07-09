@@ -3,6 +3,7 @@
 
 {% block content %}
     <div>
+        {% include "partials/social_login.html" %}
         {% include "mixins/auth/auth_form.html" with form=form cta="Log in" %}
         <div>
             <span>Don't have account?</span>

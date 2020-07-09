@@ -53,13 +53,13 @@ class User(AbstractUser):
     )
 
     LOGIN_EMAIL = "email"
-    LOGIN_FACEBOOK = "github"
-    LOGIN_NAVER = "NAVER"
+    LOGIN_FACEBOOK = "Facebook"
+    LOGIN_LINE = "Line"
 
     LOGIN_CHOICES = (
         (LOGIN_EMAIL, "Email"),
         (LOGIN_FACEBOOK, "Facebook"),
-        (LOGIN_NAVER, "Naver"),
+        (LOGIN_LINE, "LINE"),
     )
     country = CountryField(blank=True)
     avatar = models.ImageField(upload_to="avatars", blank=True)
@@ -87,12 +87,10 @@ class User(AbstractUser):
     # 메일 인증 하기 위한 메소드
     # uuid로 key값을 생성하여 secret 변수에 넣음
     def verify_email(self):
-        print("here")
         if self.email_verified is False:
             secret = uuid.uuid4().hex[:20]
             # email_secret에 secret값을 넣음
             self.email_secret = secret
-            print(self.email_secret)
             # 그리고 sendmail로 인증 메일을 보냄.
             html_message = render_to_string(
                 "emails/verify_email.html", {"secret": secret}
@@ -106,5 +104,4 @@ class User(AbstractUser):
                 html_message=html_message,
             )
             self.save()
-            print(self.email_secret)
         return
