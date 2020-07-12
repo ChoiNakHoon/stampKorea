@@ -13,6 +13,7 @@ pillow = "*"
 django-countries = "*"
 requests = "*"
 django-dotenv = "*"
+django-sslserver = "*"
 
 [requires]
 python_version = "3.7"

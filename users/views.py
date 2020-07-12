@@ -176,6 +176,86 @@ def line_callback(request):
             messages.success(request, f"Welcome back {user.first_name}")
             login(request, user)
             return redirect(reverse("core:home"))
+        else:
+            print("Not Found your code")
     except LineException as e:
         messages.error(request, e)
         return redirect(reverse("users:login"))
+
+
+def facebook_login(self):
+    client_id = os.environ.get("FB_ID")
+    redirect_uri = "https://127.0.0.1:8000/users/login/facebook/callback"
+    state = uuid.uuid4().hex[:10]
+    os.environ["FB_STATE"] = state
+    return redirect(
+        f"https://www.facebook.com/v7.0/dialog/oauth?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&state={state}"
+    )
+
+
+def facebook_callback(request):
+
+    try:
+        # facebook에서 로그인 인증 된 이후 설정된 리다이렉트 url로 code 전송
+
+        code = request.GET.get("code", None)
+        client_id = os.environ.get("FB_ID")
+        client_secret = os.environ.get("FB_SECRET")
+        redirect_uri = "https://127.0.0.1:8000/users/login/facebook/callback"
+
+        if code is not None:
+            # requests api를 이용해서 get
+            api_request = requests.get(
+                f"https://graph.facebook.com/v7.0/oauth/access_token?client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={code}"
+            )
+
+            token_json = api_request.json()
+            error = token_json.get("error", None)
+            if error is not None:
+                raise FacebookException("Can't get authorization code.")
+            access_token = token_json.get("access_token")
+
+            # Profile
+            profile_request = requests.get(
+                f"https://graph.facebook.com/me?fields=id,name,email,picture&access_token={access_token}"
+            )
+            profile_json = profile_request.json()
+            email = profile_json.get("email")
+            name = profile_json.get("name")
+            profile_image = profile_json.get("picture", None).get("data").get("url")
+            try:
+                # user가 존재 하는 지
+                user = models.User.objects.get(email=email)
+                if user.login_method != models.User.LOGIN_FACEBOOK:
+                    # FaceBook으로 로그인 하지 않았다면
+                    raise FacebookException(f"Please log in with: {user.login_method}")
+            except models.User.DoesNotExist:
+                user = models.User.objects.create(
+                    username=email,
+                    email=email,
+                    first_name=name,
+                    login_method=models.User.LOGIN_FACEBOOK,
+                    email_verified=True,
+                )
+                # 소셜로그인 경우 비밀번호 필요치 않음
+                user.set_unusable_password
+                user.save()
+                if profile_image is not None:
+                    # 이미지 있으면
+                    photo_request = requests.get(profile_image)
+                    user.avatar.save(
+                        f"{name}-avatar.jpg", ContentFile(photo_request.content),
+                    )
+            messages.success(request, f"Welcome back {user.first_name}")
+            login(request, user)
+            return redirect(reverse("core:home"))
+        else:
+            print("Not Found your code")
+    except FacebookException as e:
+        print("여기")
+        messages.error(request, e)
+        return redirect(reverse("users:login"))
+
+
+class FacebookException(Exception):
+    pass
