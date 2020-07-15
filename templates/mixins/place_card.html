@@ -1,7 +1,28 @@
 {% load static %}
 
-<div>
+<div class="w-1/4 mb-10 px-2 overflow-hidden">
     <a href="{% url 'places:detail' place.pk %}">
-        {{place.title}}
+        {% if place.first_photo is None %}
+            <div class="w-full h-64 rounded-lg shadow-md hover:shadow-lg mb-2">
+                <div class="w-full h-full bg-cover bg-center"
+                    style="background-image: url({% static 'img/add_image_error.png'%});">
+                </div>
+            </div>
+        {% else %}
+        <div class="w-full h-64 bg-cover bg-center rounded-lg shadow-md hover:shadow-lg mb-2"
+            style="background-image: url({{place.first_photo}});">
+        </div>
+        {% endif %}
+        <!-- 카드 아래 text 링크 css 작업 -->
+        <div class="flex justify-between w-full truncate">
+            <div class="w-5/6 overflow-hidden">
+                <span class="text-sm text-gray-600 font-light">{{place.region.name}}, {{place.region_sub.name}}</span>
+            </div>
+            <span class="text-sm flex items-center font-bold">
+                <i class="fas fa-star text-purple-400 text-xs mr-1"></i>{{place.total_rating}}
+                <i class="fas fa-heart mr-1 text-red-400 text-xs mx-1"></i>{{place.get_likes_count}}
+            </span>
+        </div>
+            <span class="text-black w-11/12 truncate block">{{place.title}}</span>
     </a>
 </div>

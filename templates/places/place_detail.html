@@ -1,8 +1,54 @@
 {% extends "base.html" %}
+{% load static %}
 {% block page_title %} {{place.title}} {% endblock page_title %}
 
 {% block content %}
-{{place.overview}}
-{{place.address}}
+<!-- 게시 할 사진을 가져 옵니다. (그리드 형태) -->
+
+
+{% if place.first_photo is None %}
+    <div class="container -mt-5 max-w-full h-75vh flex flex-col justify-center items-center">
+        <img class="w-1/5 h-1/5 bg-cover bg-center" src="{% static 'img/add_image_error.png' %}" alt="">
+        <span class="text-red-400 text-3xl font-semibold">Please add a picture.</span>
+    </div>
+    {% else %}
+    <div class="container -mt-5 max-w-full h-75vh flex mb-4">
+        <!-- 첫번째 사진 -->
+        <div class="h-full w-1/2 bg-cover bg-center" style="background-image: url({{place.first_photo}});"></div>
+        <!-- 나머지 사진 네장 -->
+        <div class="h-full w-1/2 flex flex-wrap">
+            {% for photo in place.get_next_four_photo %}
+                <div class="w-1/2 h-auto bg-cover bg-center border border-gray-400" style="background-image: url({{photo.url}});"></div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+    <div class="container mx-auto flex flex-col justify-around pb-56">
+        <div class="w-1/2">
+            <a href="#" class="rounded-md hover:bg-gray-200 p-1 mr-4"><i class="fas fa-external-link-alt mr-1 text-lg text-blue-400"></i>Share</a>
+        </div>
+        <div class="text-3xl font-semibold mb-px">{{place.title}}</div>
+        <span class="font-light text-blue-500">{{place.eventplace}}, {{place.address}}</span>
+        <div class="text-teal-400">
+            {{place.placeinfo}}
+        </div>
+        <div class="text-red-400">
+            {{place.playtime}}
+        </div>
+        <div>
+            {{place.overview}}
+        </div>
+        <div class="text-orange-600">
+            {{place.subevent}}
+        </div>
+        <div class="text-red-600">
+            {{place.sponsor1}} / {{place.sponsor1tel}}
+        </div>
+        <div class="text-teal-500">
+            {{place.sponsor2}} / {{place.sponsor2tel}}
+        </div>
+    </div>
+        
+    
 
 {% endblock content %}

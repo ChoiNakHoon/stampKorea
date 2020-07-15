@@ -1,21 +1,34 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="http://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
     <title> {% block page_title %}{% endblock page_title %} | Nanum</title>
   </head>
-  <body>
-      <header>
-          {% block search-bar %}
-          <form method="GET" action="{% url 'places:search' %}">
-              <input name="city" placeholder="Search By Trip">
-          </form>
-          {% endblock search-bar %}
+  <body class="font-light text-gray-700 mt-24">
+      <header class="container inset-0 max-w-full flex items-center justify-between px-6 h-20 border-b border-gray-400 fixed bg-white">
+          <div class="flex items-center w-1/3">
+            <a href="{% url 'core:home' %}" class="mr-6">
+              <img class="w-8" src="{% static 'img/logo.png'%}" alt="logo" />
+            </a>
+            {% block search-bar %}
+            <form method="GET" action="{% url 'places:search' %}" class="w-9/12">
+                <input 
+                class="search-box border px-5 py-3 w-full rounded-md shadow-md hover:shadow-lg text-sm font-semibold placeholder-gray-400 focus:outline-none"
+                name="city" placeholder="Search By Trip">
+            </form>
+            {% endblock search-bar %}
+          </div>
           {% include "partials/nav.html" %}
       </header>
-    {% block content %} {% endblock content %}
-
+      <div>
+        {% block content %} {% endblock content %}
+        
+      </div>
     {% include "partials/footer.html" %} 
   </body>
 </html>

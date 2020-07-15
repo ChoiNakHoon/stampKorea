@@ -1,16 +1,21 @@
-<ul>
+<ul class="flex items-center text-sm font-semibold h-full">
     <!-- 유저 로그인 확인 -->
-    <li><a href="#">Trip List</a></li>
-    <li>
+    
+    {% if user.is_authenticated %}
+        
+    <li class="nav_link"><a href="#">Trip List</a></li>
+    <li class="nav_link">
         <a href="#">Profile</a>
     </li>
-    <li>
+    <li class="nav_link">
         <a href="{% url 'users:logout' %}">Log out</a>
     </li>
-    <li>
+    {% else %}
+    <li class="nav_link">
         <a href="{% url 'users:login' %}">Login</a>
     </li>
-    <li>
+    <li class="nav_link">
         <a href="{% url 'users:signup' %}">Sign Up</a>
     </li>
+    {% endif %}
 </ul>
