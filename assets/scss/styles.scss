@@ -14,4 +14,39 @@
     @apply border-blue-500;
   }
 }
+
+.btn {
+  @apply text-center rounded-sm py-4 font-light w-full;
+}
+
+.btn_link {
+  @apply text-center rounded-lg py-2 font-light w-full bg-red-400 text-white;
+}
+
+.form_login {
+  @apply rounded-sm py-4 font-light w-full text-left border border-gray-600 px-5;
+  &:focus {
+    @apply outline-none border-teal-600;
+  }
+}
+
+form {
+  .common_input {
+    @apply rounded-sm py-4 font-light w-full text-left border border-gray-600 px-5 mb-3;
+    input,
+    select {
+      &:focus {
+        @apply outline-none border-teal-600;
+      }
+    }
+    &.has_error {
+      input {
+        @apply bg-red-200 border-red-200;
+        &:focus {
+          @apply border-red-200;
+        }
+      }
+    }
+  }
+}
 @tailwind utilities;

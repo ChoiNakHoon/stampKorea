@@ -1,8 +1,8 @@
-<div>
+<div class="common_input {% if field.errors %}has_error{% endif %}">
     {{field}}
     {% if field.erros %}
         {% for error in field.errors %}
-            <span>{{error}}</span>
+            <span class="text-red-700 font-medium">{{error}}</span>
         {% endfor %}
     {% endif %}
 </div>

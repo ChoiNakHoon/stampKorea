@@ -1,7 +1,7 @@
 import os
 import uuid
 import requests
-from django.views.generic import FormView, DetailView, UpdateView, View
+from django.views.generic import FormView, DetailView, UpdateView
 from django.shortcuts import redirect, reverse, render
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -22,7 +22,6 @@ class LoginView(mixnis.LoggedOutOnlyView, FormView):
         if user is not None:
             login(self.request, user)
         if user.email_verified is False:
-            print("인증 해주세요")
             log_out(self.request)
             return redirect(reverse("users:check-email", kwargs={"user": email}))
         return super().form_valid(form)
