@@ -6,8 +6,12 @@
     <div class="flex flex-wrap">
         <!-- 현재 데이터 베이스에 있는 축제 정보를 가져 옵니다. -->
         {% for place in places %}
-        <!-- for문으로 통해 넘겨준 place value값을 넘깁니다. -->
-            {% include 'mixins/place_card.html' with place=place %}
+            
+            {% if place.is_progress %}
+                <!-- for문으로 통해 넘겨준 place value값을 넘깁니다. -->
+                {% include 'mixins/place_card.html' with place=place %}
+            {% endif %}
+                
         {% endfor %}
     </div>
     <!-- PAGINATOR -->

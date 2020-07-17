@@ -1,7 +1,9 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
+from django.db.models import Q
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from places import models as places_models
+from reviews import forms as reviews_forms
 from . import forms
 
 
@@ -34,6 +36,7 @@ class HomeView(ListView):
         queryset = places_models.Place.objects.filter(content_type="85").order_by(
             "-created"
         )
+
         paginator = Paginator(queryset, 12, orphans=1)
 
         page = request.GET.get("page", 1)
@@ -60,11 +63,20 @@ class HomeView(ListView):
         )
 
 
-class PlaceDetailView(DetailView):
+class PlaceFastivalDetail(View):
 
     """ Detail View Definition """
 
-    model = places_models.Place
+    def get(self, *args, **kwargs):
+
+        pk = kwargs.get("pk")
+        place = places_models.Place.objects.get(pk=pk)
+        form = reviews_forms.CreateReviewForm()
+        return render(
+            self.request,
+            "places/place_detail.html",
+            context={"place": place, "form": form},
+        )
 
 
 class SearchView(ListView):

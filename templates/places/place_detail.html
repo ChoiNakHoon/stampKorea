@@ -7,10 +7,9 @@
 
 
 {% if place.first_photo is None %}
-    <div class="container -mt-5 max-w-full h-75vh flex flex-col justify-center items-center">
+<div class="container -mt-5 max-w-full h-75vh flex flex-col justify-center items-center">
         <img class="w-1/5 h-1/5 bg-cover bg-center" src="{% static 'img/add_image_error.png' %}" alt="">
         <span class="text-red-400 text-3xl font-semibold">Please add a picture.</span>
-    </div>
     {% else %}
     <div class="container -mt-5 max-w-full h-75vh flex mb-4">
         <!-- 첫번째 사진 -->
@@ -23,32 +22,204 @@
         </div>
     </div>
 {% endif %}
-    <div class="container mx-auto flex flex-col justify-around pb-56">
-        <div class="w-1/2">
+    <div class="container mx-auto flex flex-row justify-v pb-56">
+        <div class="w-2/3 pr-10">
             <a href="#" class="rounded-md hover:bg-gray-200 p-1 mr-4"><i class="fas fa-external-link-alt mr-1 text-lg text-blue-400"></i>Share</a>
+            <div class="flex flex-col">
+                <span class="text-xl font-semibold text-black">{{place.title}}</span>
+                <span class="font-light text-black border-gray-400">{{place.eventplace}}, {{place.address}}</span>
+            </div>
+            <div class="flex items-center py-4 text-black">
+                <i class="fas fa-star text-teal-600 mr-1 text-xl"></i>
+                <span class="font-semibold text-2xl">{{place.total_rating}}</span>
+                <span class="mx-4 text-gray-400">|</span>
+                <div>
+                    <span class="font-semibold text-2xl mr-1">{{place.reviews.count}}</span>
+                    <span class="font-semibold text-2xl"> review{{place.reviews.count|pluralize}}</span>
+                </div>
+            </div>
+            <div class="pb-2">
+                <span class="text-3xl font-semibold text-black">Infomation</span>
+            </div>
+            <div class="flex content-start flex-wrap w-auto">
+                <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                    <i class="far fa-calendar-alt text-black text-3xl mr-2 ml-1"></i><span class="text-black font-light">{{place.get_start_date| date:'Y F d'}} ~ {{place.get_end_date| date:'Y F d'}}</span>
+                </div>
+                {% if place.agelimit %}
+                    <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                        <i class="fas fa-user-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.agelimit}}</span>
+                    </div>
+                {% endif %}
+                {% if place.bookingplace %}
+                    <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                        <i class="far fa-calendar-check text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.bookingplace}}</span>
+                    </div>
+                {% endif %}
+                
+                {% if place.discountinfofestival %}
+                    <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                        <i class="fas fa-percent text-black text-3xl mr-2"></i></i><span class="text-black font-light">{{place.discountinfofestival}}</span>
+                    </div>
+                {% endif %}
+
+                {% if place.eventhomepage %}
+                <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                    <i class="fas fa-home text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.eventhomepage}}</span>
+                </div>
+                {% else %}
+                <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                    <i class="fas fa-home text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.homepage | safe}}</span>
+                </div>
+                {% endif %}
+                    
+                {% if place.playtime %}
+                <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                    <i class="fas fa-clock text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.playtime}}</span>
+                </div>
+                {% endif %}
+
+                {% if place.usetimefestival %}
+                <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                    <i class="fas fa-comment-dollar text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.usetimefestival}}</span>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="border-section"></div>
+            <div class="border-section">
+                <div class="text-xl text-black">
+                    {% if place.program %}
+                        {{place.program}}
+                    {% else %}
+                        {{place.overview}}
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Maps. -->
+            <!-- Review. -->
+            <div class="mt-8">
+                <h4 class="text-3xl font-semibold text-black mb-2">Reviews</h4>
+                <form action="{% url 'reviews:create' place.pk %}" method="POST" class="flex flex-col rounded-md py-6 mx-auto border border-gray-300">
+                    {% csrf_token %}
+                    <div class="flex flex-wrap">
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Accuracy
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.accuracy}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Safety
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.safety}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Communication
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.communication}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Location
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.location}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Value
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.value}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                            Review
+                        </label>
+                        <span>{{form.review}}</span>
+                    </div>
+                    <div class="flex justify-end px-2">
+                        <button class="w-3/12 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Review</button>
+                    </div>    
+            
+                </form>
+                <div class="mt-10">
+                    {% for review in place.reviews.all %}
+                    <div class="flex flex-row mt-8">
+                        <div class="mr-4">
+                            {% include 'mixins/user_avatar.html' with user=review.user h_and_w='h-10 w-10' text='text-sm' %}
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="font-semibold">
+                                {{review.user.first_name}}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                {{review.created|date:'F Y'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-section">{{review.review}}</div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        <div class="text-3xl font-semibold mb-px">{{place.title}}</div>
-        <span class="font-light text-blue-500">{{place.eventplace}}, {{place.address}}</span>
-        <div class="text-teal-400">
-            {{place.placeinfo}}
+        <div class="w-1/3 flex flex-col">
+            <span class="border-b border-gray-400 mt-4 text-gray-600 font-light">MAPS</span>
+            <div class="flex justify-center items-center mt-4">
+                <span class="h-75vh w-75vh" id="map-js"></span>
+            </div>
+            <span class="border-b border-gray-400 mt-4 text-gray-600 font-light">Directions</span>
+            <span class="text-teal-500 font-light mt-4">{{place.placeinfo | safe }}</span>
+
+            <span class="border-b border-gray-400 mt-4 text-gray-600 font-light">Sponsor</span>
+                
+            <span class="text-red-500 font-semibold mt-4">{{place.sponsor1 | safe }}</span>
+            <span class="text-red-400 font-light">{{place.sponsor1tel | safe }}</span>
+            <br>
+            <span class="text-red-500 font-semibold">{{place.sponsor2 | safe }}</span>
+            <span class="text-red-400 font-light">{{place.sponsor2tel | safe }}</span>
         </div>
-        <div class="text-red-400">
-            {{place.playtime}}
-        </div>
-        <div>
-            {{place.overview}}
-        </div>
-        <div class="text-orange-600">
-            {{place.subevent}}
-        </div>
-        <div class="text-red-600">
-            {{place.sponsor1}} / {{place.sponsor1tel}}
-        </div>
-        <div class="text-teal-500">
-            {{place.sponsor2}} / {{place.sponsor2tel}}
-        </div>
-    </div>
-        
-    
+        <script>
+            const mapx = {{place.mapx}};
+            const mapy = {{place.mapy}};
+        </script>
+        <script src="{% static 'js/maps.js'%}"></script>
+</div>
 
 {% endblock content %}

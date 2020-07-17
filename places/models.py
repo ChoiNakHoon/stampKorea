@@ -1,4 +1,6 @@
+from datetime import datetime
 from django.db import models
+from django.utils import timezone
 from django.urls import reverse
 from core import models as core_models
 
@@ -281,6 +283,24 @@ class Place(core_models.TimeStampedModel):
         return self.likes.count()
 
     get_likes_count.short_description = ".Like"
+
+    def get_start_date(self):
+        return datetime.strptime(self.eventstartdate, "%Y%m%d").date()
+
+    def get_end_date(self):
+        return datetime.strptime(self.eventenddate, "%Y%m%d").date()
+
+    # 현재 시간에서 진행이 가능 한 경우
+    def is_progress(self):
+        if self.eventenddate is not None:
+            now = timezone.now().date()
+            end_date = datetime.strptime(self.eventenddate, "%Y%m%d").date()
+            return now < end_date
+        else:
+            return False
+
+    is_progress.boolean = True
+    # datetime.strptime(self.eventenddate,).date()
 
     # is_parking
     # is_use_time

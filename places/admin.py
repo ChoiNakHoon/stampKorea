@@ -2,6 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.utils.html import mark_safe
 from . import models
+from reviews import models as reviews_models
 
 
 @admin.register(models.Cat_Type, models.Sub_Region)
@@ -48,11 +49,17 @@ class PhotoInline(admin.TabularInline):
     model = models.Photo
 
 
+class ReviewInline(admin.TabularInline):
+    """ Review Inline Definition """
+
+    model = reviews_models.Review
+
+
 @admin.register(models.Place)
 class PlaceAdmin(admin.ModelAdmin):
     """ Place Admin Definition """
 
-    inlines = (SubInfoInline, PhotoInline)
+    inlines = (SubInfoInline, PhotoInline, ReviewInline)
 
     fieldsets = (
         (
@@ -207,6 +214,7 @@ class PlaceAdmin(admin.ModelAdmin):
         "get_likes_count",
         "total_rating",
         "content_type",
+        "is_progress",
     )
 
     list_filter = (
