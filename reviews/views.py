@@ -19,11 +19,7 @@ def create_review(request, place):
             review.user = request.user
             review.save()
             messages.success(request, "Success Reviewed")
-            if place.content_type == "85":
-                return redirect(
-                    reverse("places:festival-detail", kwargs={"pk": place.pk})
-                )
-            return redirect(reverse("places:festival-detail", kwargs={"pk": place.pk}))
+            return redirect(reverse("places:detail", kwargs={"pk": place.pk}))
 
 
 # Create your views here.

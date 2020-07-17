@@ -2,31 +2,7 @@
 
 <div class="w-1/4 mb-10 px-2 overflow-hidden">
     {{place.content_type}}
-    {% if  place.content_type == "85"%}
-        <!-- 행사 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% elif place.content_type == "76"%}
-        <!-- 관광지 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% elif place.content_type == "78"%}
-        <!-- 문화 시설 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% elif place.content_type == "75"%}
-        <!-- 레포츠 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% elif place.content_type == "80"%}
-        <!-- 숙박 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% elif place.content_type == "79"%}
-        <!-- 쇼핑 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% elif place.content_type == "82"%}
-        <!-- 음식점 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% elif place.content_type == "77"%}
-        <!-- 교통 정보 -->
-        <a href="{% url 'places:festival-detail' place.pk %}">
-    {% endif %}
+    <a href="{% url 'places:detail' place.pk %}">
         
         {% if place.first_photo is None %}
             <div class="w-full h-64 rounded-lg shadow-md hover:shadow-lg mb-2">

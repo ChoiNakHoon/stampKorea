@@ -63,7 +63,30 @@ class HomeView(ListView):
         )
 
 
-class PlaceFastivalDetail(View):
+class PlaceDetailView(View):
+
+    """ Detail View Definition """
+
+    def get(self, *args, **kwargs):
+
+        pk = kwargs.get("pk")
+        place = places_models.Place.objects.get(pk=pk)
+        form = reviews_forms.CreateReviewForm()
+        if place.content_type == "85":
+            return render(
+                self.request,
+                "places/place_detail.html",
+                context={"place": place, "form": form},
+            )
+        elif place.content_type == "76":
+            return render(
+                self.request,
+                "places/place_nature_detail.html",
+                context={"place": place, "form": form},
+            )
+
+
+class PlaceNatureDetail(View):
 
     """ Detail View Definition """
 
