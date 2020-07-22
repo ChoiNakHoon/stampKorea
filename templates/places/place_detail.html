@@ -22,7 +22,7 @@
         </div>
     </div>
 {% endif %}
-    <div class="container mx-auto flex flex-row justify-v pb-56">
+    <div class="container mx-auto flex flex-row justify-around pb-56">
         <div class="w-2/3 pr-10">
             <a href="#" class="rounded-md hover:bg-gray-200 p-1 mr-4"><i class="fas fa-external-link-alt mr-1 text-lg text-blue-400"></i>Share</a>
             <div class="flex flex-col">
@@ -47,24 +47,25 @@
                 </div>
                 {% if place.agelimit %}
                     <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                        <i class="fas fa-user-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.agelimit}}</span>
+                        <i class="fas fa-user-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.agelimit | safe}}</span>
                     </div>
                 {% endif %}
+
                 {% if place.bookingplace %}
                     <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                        <i class="far fa-calendar-check text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.bookingplace}}</span>
+                        <i class="far fa-calendar-check text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.bookingplace | safe}}</span>
                     </div>
                 {% endif %}
                 
                 {% if place.discountinfofestival %}
                     <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                        <i class="fas fa-percent text-black text-3xl mr-2"></i></i><span class="text-black font-light">{{place.discountinfofestival}}</span>
+                        <i class="fas fa-percent text-black text-3xl mr-2"></i></i><span class="text-black font-light">{{place.discountinfofestival | safe}}</span>
                     </div>
                 {% endif %}
 
                 {% if place.eventhomepage %}
                 <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                    <i class="fas fa-home text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.eventhomepage}}</span>
+                    <i class="fas fa-home text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.eventhomepage | safe}}</span>
                 </div>
                 {% else %}
                 <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
@@ -74,13 +75,13 @@
                     
                 {% if place.playtime %}
                 <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                    <i class="fas fa-clock text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.playtime}}</span>
+                    <i class="fas fa-clock text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.playtime | safe}}</span>
                 </div>
                 {% endif %}
 
                 {% if place.usetimefestival %}
                 <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                    <i class="fas fa-comment-dollar text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.usetimefestival}}</span>
+                    <i class="fas fa-comment-dollar text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.usetimefestival | safe}}</span>
                 </div>
                 {% endif %}
 

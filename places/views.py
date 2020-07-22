@@ -1,3 +1,4 @@
+import json
 from django.views.generic import ListView, DetailView, View
 from django.db.models import Q
 from django.shortcuts import render
@@ -14,25 +15,10 @@ class HomeView(ListView):
     # 최대 보여지는 페이지를 n번으로 제한하고
     # 최대 보여지는 max_index에 도달하고 next하게 되면
     # n번으로 제한된 만큼 페이지가 보여진다.
-    # def get_context_data(self, **kwargs):
-    #     context = super(HomeView, self).get_context_data(**kwargs)
-    #     paginator = context["paginator"]
-    #     # 보여지는 페이지 숫자
-    #     page_numbers_range = 10
-    #     max_index = len(paginator.page_range)
-
-    #     page = self.request.GET.get("page")
-    #     current_page = int(page) if page else 1
-
-    #     start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
-    #     end_index = start_index + page_numbers_range
-    #     if end_index >= max_index:
-    #         end_index = max_index
-
-    #     page_range = paginator.page_range[start_index:end_index]
-    #     context["page_range"] = page_range
-    #     return context
     def get(self, request):
+        search = []
+        search += places_models.Region.objects.all()
+
         queryset = places_models.Place.objects.filter(content_type="85").order_by(
             "-created"
         )
@@ -59,7 +45,7 @@ class HomeView(ListView):
         return render(
             request,
             "places/places_list.html",
-            context={"places": places, "page_range": page_range},
+            context={"places": places, "search": search, "page_range": page_range},
         )
 
 
@@ -68,7 +54,6 @@ class PlaceDetailView(View):
     """ Detail View Definition """
 
     def get(self, *args, **kwargs):
-
         pk = kwargs.get("pk")
         place = places_models.Place.objects.get(pk=pk)
         form = reviews_forms.CreateReviewForm()
@@ -83,6 +68,46 @@ class PlaceDetailView(View):
                 self.request,
                 "places/place_nature_detail.html",
                 context={"place": place, "form": form},
+            )
+        elif place.content_type == "78":
+            return render(
+                self.request,
+                "places/place_culture_detail.html",
+                context={"place": place, "form": form},
+            )
+        elif place.content_type == "75":
+            return render(
+                self.request,
+                "places/place_sports_detail.html",
+                context={"place": place, "form": form},
+            )
+        elif place.content_type == "80":
+            return render(
+                self.request,
+                "places/place_accommodation_detail.html",
+                context={"place": place, "form": form},
+            )
+        elif place.content_type == "82":
+            return render(
+                self.request,
+                "places/place_cuisine_detail.html",
+                context={"place": place, "form": form},
+            )
+        elif place.content_type == "79":
+            return render(
+                self.request,
+                "places/place_shopping_detail.html",
+                context={"place": place, "form": form},
+            )
+        elif place.content_type == "77":
+            return render(
+                self.request,
+                "places/place_transportation_detail.html",
+                context={"place": place, "form": form},
+            )
+        else:
+            return render(
+                self.request, "places/places_list.html", context={"place": place,},
             )
 
 
@@ -108,31 +133,16 @@ class SearchView(ListView):
 
     def get(self, request):
         form = forms.SearchForm(request.GET)
-        form.fields["city"].queryset = places_models.Sub_Region.objects.filter(
-            region=request.GET.get("region")
-        )
+        word = "%s" % self.request.GET["search"]  # 검색어
+        result_word = word.capitalize()
+        search = []
+        search += places_models.Region.objects.all()
+        queryset = places_models.Place.objects.filter(
+            Q(region__name=result_word)
+            | Q(region_sub__name=result_word)
+            | Q(cat_type__name=result_word)
+        ).distinct()
         if form.is_valid():
-
-            region = form.cleaned_data.get("region")
-            city = form.cleaned_data.get("city")
-            cat_type = form.cleaned_data.get("cat_type")
-            # filter
-            filter_args = {}
-
-            if region is not None:
-                # filter_args에 filter할 key와 옵션을 기입
-                filter_args["region__name__istartswith"] = region
-
-            if city is not None:
-                filter_args["region_sub__name__istartswith"] = city
-
-            if cat_type is not None:
-                filter_args["cat_type"] = cat_type
-
-            queryset = places_models.Place.objects.filter(**filter_args).order_by(
-                "-created"
-            )
-
             paginator = Paginator(queryset, 12, orphans=1)
 
             page = request.GET.get("page", 1)
@@ -154,14 +164,29 @@ class SearchView(ListView):
 
             page_range = paginator.page_range[start_index:end_index]
 
+            locations = [
+                [l.title, l.address, l.cat_type.name, l.mapx, l.mapy, i]
+                for i, l in enumerate(places)
+            ]
             return render(
                 request,
                 "places/search.html",
-                context={"form": form, "places": places, "page_range": page_range},
+                context={
+                    "form": form,
+                    "places": places,
+                    "page_range": page_range,
+                    "search": search,
+                    "word": word,
+                    "locations": locations,
+                },
             )
 
         else:
             form = forms.SearchForm()
 
-        return render(request, "places/search.html", context={"form": form})
+        return render(
+            request,
+            "places/search.html",
+            context={"form": form, "search": search, "word": word,},
+        )
 

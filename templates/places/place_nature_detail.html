@@ -22,7 +22,7 @@
         </div>
     </div>
 {% endif %}
-    <div class="container mx-auto flex flex-row justify-v pb-56">
+    <div class="container mx-auto flex flex-row justify-around pb-56">
         <div class="w-2/3 pr-10">
             <a href="#" class="rounded-md hover:bg-gray-200 p-1 mr-4"><i class="fas fa-external-link-alt mr-1 text-lg text-blue-400"></i>Share</a>
             <div class="flex flex-col">
@@ -47,22 +47,22 @@
                 <!-- 체험 가능 연령 -->
                 {% if place.expagerange %}
                     <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                        <i class="fas fa-user-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.expagerange}}</span>
+                        <i class="fas fa-user-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.expagerange |safe}}</span>
                     </div>
                 {% endif %}
-
+                <!-- 쉬는 날 -->
                 {% if place.rest_date %}
                     <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                        <i class="far fa-times-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.rest_date}}</span>
+                        <i class="far fa-times-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.rest_date | safe}}</span>
                     </div>
                 {% endif %}
-
+                <!-- 이용 시간 -->
                 {% if place.use_time %}
                 <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
-                    <i class="fas fa-clock text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.use_time}}</span>
+                    <i class="fas fa-clock text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.use_time | safe}}</span>
                 </div>
                 {% endif %}
-
+                <!-- 홈페이지 -->
                 {% if place.homepage %}
                 <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
                     <i class="fas fa-home text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.homepage | safe}}</span>

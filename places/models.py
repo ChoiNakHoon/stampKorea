@@ -300,7 +300,6 @@ class Place(core_models.TimeStampedModel):
             return False
 
     is_progress.boolean = True
-    # datetime.strptime(self.eventenddate,).date()
 
     # is_parking
     # is_use_time

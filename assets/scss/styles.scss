@@ -71,4 +71,24 @@ form {
     @apply outline-none bg-white;
   }
 }
+
+.autocomplete {
+  @apply absolute inline-block w-auto;
+}
+
+.autocomplete-items {
+  @apply absolute border w-auto border-gray-100 rounded-md border-b-0 border-t-0 z-50 top-auto left-0 right-0;
+}
+
+.autocomplete-items div {
+  @apply p-2 cursor-pointer w-auto bg-white border-b border-gray-400 rounded-md;
+  &:hover {
+    @apply bg-blue-400;
+  }
+}
+
+div.autocomplete-active {
+  @apply bg-blue-400 w-auto text-white;
+}
+
 @tailwind utilities;
