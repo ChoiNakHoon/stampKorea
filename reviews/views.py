@@ -7,7 +7,6 @@ from . import forms
 def create_review(request, place):
 
     """ Create Reviews Definition """
-    print("여기 리뷰입니다.")
     if request.method == "POST":
         form = forms.CreateReviewForm(request.POST)
         place = place_models.Place.objects.get(pk=place)
