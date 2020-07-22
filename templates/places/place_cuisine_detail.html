@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_title %} {{place.title}} {% endblock page_title %}
+
+{% block content %}
+<!-- 게시 할 사진을 가져 옵니다. (그리드 형태) -->
+
+
+{% if place.first_photo is None %}
+<div class="container -mt-5 max-w-full h-75vh flex flex-col justify-center items-center">
+        <img class="w-75vh h-full bg-cover bg-center" src="{% static 'img/add_image_error.png' %}" alt="">
+        <span class="text-red-400 text-3xl font-semibold">Please add a picture.</span>
+    {% else %}
+    <div class="container -mt-5 max-w-full h-75vh flex mb-4">
+        <!-- 첫번째 사진 -->
+        <div class="h-full w-1/2 bg-cover bg-center" style="background-image: url({{place.first_photo}});"></div>
+        <!-- 나머지 사진 네장 -->
+        <div class="h-full w-1/2 flex flex-wrap">
+            {% for photo in place.get_next_four_photo %}
+                <div class="w-1/2 h-auto bg-cover bg-center border border-gray-400" style="background-image: url({{photo.url}});"></div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+    <div class="container mx-auto flex flex-row justify-around pb-56">
+        <div class="w-2/3 pr-10">
+            <a href="#" class="rounded-md hover:bg-gray-200 p-1 mr-4"><i class="fas fa-external-link-alt mr-1 text-lg text-blue-400"></i>Share</a>
+            <div class="flex flex-col">
+                <span class="text-2xl font-semibold text-black">{{place.title}}</span>
+                <span class="font-light text-black border-gray-400">{{place.address}}</span>
+            </div>
+            <div class="flex items-center py-4 text-black">
+                <i class="fas fa-star text-teal-600 mr-1 text-xl"></i>
+                <span class="font-semibold text-2xl">{{place.total_rating}}</span>
+                <span class="mx-4 text-gray-400">|</span>
+                <div>
+                    <span class="font-semibold text-2xl mr-1">{{place.reviews.count}}</span>
+                    <span class="font-semibold text-2xl"> review{{place.reviews.count|pluralize}}</span>
+                </div>
+            </div>
+            {% if place.firstmenu %}
+            <div class="flex flex-col border-section mb-6">
+                <h4 class="text-3xl font-semibold text-black mb-2">Menu</h4>
+                <span class="text-black text-xl mt-4">{{place.firstmenu | safe }}</span>
+            </div>
+            {% endif %}
+            <div class="pb-2">
+                <span class="text-3xl font-semibold text-black">Infomation</span>
+            </div>
+
+            <div class="flex content-start flex-wrap w-auto">
+                
+                <!-- 운영 시간 -->
+                {% if place.opentimefood %}
+                <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                    <i class="fas fa-clock text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.opentimefood | safe}}</span>
+                </div>
+                {% endif %}
+
+                <!-- 쉬는 날 -->
+                {% if place.restdatefood %}
+                    <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                        <i class="far fa-times-circle text-black text-3xl mr-2"></i><span class="text-black font-light">{{place.restdatefood | safe}}</span>
+                    </div>
+                {% endif %}
+
+                <!-- 부대 시설 -->
+                {% if place.subfacility %}
+                    <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                        <i class="fas fa-comment-dollar text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.subfacility | safe}}</span>
+                    </div>
+                {% endif %}
+
+                <!-- 홈페이지 -->
+                {% if place.homepage %}
+                <div class="flex items-center p-2 w-1/2 rounded-sm hover:bg-gray-200">
+                    <i class="fas fa-home text-3xl text-black mr-2"></i><span class="text-black font-light">{{place.homepage | safe}}</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="border-section"></div>
+            <div class="border-section">
+                <h4 class="text-3xl font-semibold text-black mb-2">OverView</h4>
+                <div class="text-xl text-black">
+                    {% if place.overview %}
+                        {{place.overview | safe }}
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Review. -->
+            <div class="mt-8">
+                <h4 class="text-3xl font-semibold text-black mb-2">Reviews</h4>
+                <form action="{% url 'reviews:create' place.pk %}" method="POST" class="flex flex-col rounded-md py-6 mx-auto border border-gray-300">
+                    {% csrf_token %}
+                    <div class="flex flex-wrap">
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Accuracy
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.accuracy}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Safety
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.safety}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Communication
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.communication}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Location
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.location}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/5 px-2">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Value
+                            </label>
+                            <div class="relative">
+                                <div>
+                                    {{form.value}}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                            Review
+                        </label>
+                        <span>{{form.review}}</span>
+                    </div>
+                    <div class="flex justify-end px-2">
+                        <button class="w-3/12 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Review</button>
+                    </div>    
+            
+                </form>
+                <div class="mt-10">
+                    {% for review in place.reviews.all %}
+                    <div class="flex flex-row mt-8">
+                        <div class="mr-4">
+                            {% include 'mixins/user_avatar.html' with user=review.user h_and_w='h-10 w-10' text='text-sm' %}
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="font-semibold">
+                                {{review.user.first_name}}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                {{review.created|date:'F Y'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-section">{{review.review}}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="w-1/3 flex flex-col">
+            <span class="border-b border-gray-400 mt-4 text-gray-600 font-light">MAPS</span>
+            <div class="flex justify-center items-center mt-4">
+                <span class="h-75vh w-75vh" id="map-js"></span>
+            </div>
+            
+            {% if place.directions %}
+                <span class="border-b border-gray-400 mt-4 text-gray-600 font-light">Directions</span>
+                <span class="text-black font-light mt-4">{{place.directions | safe }}</span>
+            {% endif %}
+
+            {% if place.infocenterfood %}
+                <span class="border-b border-gray-400 mt-4 text-gray-600 font-light">Info Center</span>
+                <span class="text-black font-light mt-4">{{place.infocenterfood | safe }}</span>
+            {% endif %}
+
+            {% if place.parkingfood %}
+                <span class="border-b border-gray-400 mt-4 text-gray-600 font-light">Parking</span>
+               <span class="text-black font-light mt-4" >{{place.parkingfood | safe}}</span>
+            {% endif %}
+        </div>
+        <script>
+            const mapx = {{place.mapx}};
+            const mapy = {{place.mapy}};
+        </script>
+        <script src="{% static 'js/maps.js'%}"></script>
+</div>
+
+{% endblock content %}
