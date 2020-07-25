@@ -3,14 +3,15 @@ import uuid
 import requests
 from django.views.generic import FormView, DetailView, UpdateView
 from django.shortcuts import redirect, reverse, render
-from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import PasswordChangeView
 from django.core.files.base import ContentFile
-from . import forms, models, mixnis
+from django.contrib.messages.views import SuccessMessageMixin
+from . import forms, models, mixins
 
 
-class LoginView(mixnis.LoggedOutOnlyView, FormView):
+class LoginView(mixins.LoggedOutOnlyView, FormView):
 
     template_name = "users/login.html"
     form_class = forms.LoginForm
@@ -46,7 +47,7 @@ def log_out(request):
     return redirect(reverse("core:home"))
 
 
-class SignupView(mixnis.LoggedOutOnlyView, FormView):
+class SignupView(mixins.LoggedOutOnlyView, FormView):
 
     """ Sign up View Definition"""
 
@@ -251,10 +252,69 @@ def facebook_callback(request):
         else:
             print("Not Found your code")
     except FacebookException as e:
-        print("여기")
         messages.error(request, e)
         return redirect(reverse("users:login"))
 
 
 class FacebookException(Exception):
     pass
+
+
+class UserProfileView(DetailView):
+
+    model = models.User
+    context_object_name = "user_obj"
+
+
+class UpdateProfileView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
+
+    model = models.User
+    template_name = "users/update_profile.html"
+    fields = (
+        "first_name",
+        "last_name",
+        "avatar",
+        "gender",
+        "bio",
+        "birthdate",
+        "language",
+        "currency",
+    )
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["first_name"].widget.attrs = {"placeholder": "First Name"}
+        form.fields["last_name"].widget.attrs = {"placeholder": "Last_name"}
+        form.fields["gender"].widget.attrs = {"placeholder": "Gender"}
+        form.fields["birthdate"].widget.attrs = {"placeholder": "Birth Date"}
+        form.fields["language"].widget.attrs = {"placeholder": "Language"}
+        form.fields["currency"].widget.attrs = {"placeholder": "Currency"}
+        return form
+
+    success_message = "Profile Updated"
+
+
+class UpdatePasswordView(
+    mixins.LoggedInOnlyView,
+    mixins.EmailLoginOnlyView,
+    SuccessMessageMixin,
+    PasswordChangeView,
+):
+
+    template_name = "users/update_password.html"
+    success_message = "Password Changed"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["old_password"].widget.attrs = {"placeholder": "Current Password"}
+        form.fields["new_password1"].widget.attrs = {"placeholder": "New Password"}
+        form.fields["new_password2"].widget.attrs = {
+            "placeholder": "Confirm New Password"
+        }
+        return form
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()

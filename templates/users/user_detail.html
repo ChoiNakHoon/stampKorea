@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block page_title %}
+{{user_obj.first_name}}'s Profile
+{% endblock page_title%}
+
+{% block content %}
+<div class="container flex mx-auto h-100vh">
+    <div class="flex flex-col w-1/4 h-75vh mx-auto items-center my-10 p-10 border border-gray-400 rounded-lg">
+        {% include 'mixins/user_avatar.html' with user=user_obj %}
+        {% if user == user_obj %}
+        <a href="{% url 'users:user_update' %}" class="btn_link mt-4 mb-4">Edit Profile</a>
+        {% endif %}
+
+        <div class="flex flex-col w-full mt-8 px-4">
+            <span class="border-t border-gray-400 pt-6 text-black text-lg font-semibold"> {{user_obj.first_name}} confirmed</span> 
+            <div class="mt-2">
+                {% if user_obj.email_verified %}
+                    <i class="fas fa-check-circle text-teal-500 mr-2 text-xl"></i>
+                {% else %}
+                    <i class="fas fa-minus-circle text-red-500 mr-2 text-xl"></i>
+                {% endif %}
+                <span class="text-lg text-black">Email address</span>
+            </div>
+            <div class="mt-2">
+                {% if user_obj.super_user %}
+                    <i class="fas fa-check-circle text-teal-500 mr-2 text-xl"></i>
+                {% else %}
+                    <i class="fas fa-minus-circle text-red-500 mr-2 text-xl"></i>
+                {% endif %}
+                <span class="text-lg text-black">Phone number</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col inset-0 w-3/5 my-10 mb-4 h-auto overflow-y-scroll" id="contents">
+        <h1 class="text-3xl text-black font-semibold">Hi, I'm {{user_obj.first_name}}</h1>
+        <h3 class="text-md font-light mb-1">Joined in {{user_obj.date_joined | date:'F Y'}}</h3>
+        
+        <h1 class="text-xl text-black font-semibold mt-10">About</h1>
+        <h1 class="text-lg text-black font-light border-b border-gray-400 pb-6 mt-6 w-full">{{user_obj.bio}}</h1>
+    {% if user_obj.reviews.all %}
+        <div class="flex flex-col w-full">
+            <div class="flex items-center pt-4 text-black">
+                <i class="fas fa-star text-teal-600 mr-1 text-xl"></i>
+                <div>
+                    <span class="font-semibold text-2xl">{{user_obj.reviews.count}}</span>
+                    <span class="font-semibold text-2xl">review{{user_obj.reviews.count|pluralize}}</span>
+                </div>
+            </div>
+            <!-- 현재 데이터 베이스에 있는 방 이름과 가격을 가져 옵니다. -->
+            {% for review in user_obj.reviews.all %}
+            <!-- for-in 통해 넘겨준 room variavble 인자 넘길때 띄워쓰기 하면 안 됨--> 
+            <div class="flex flex-row mt-6 w-full">
+                <div class="mr-4">
+                    {% include 'mixins/user_avatar.html' with user=review.user h_and_w='h-12 w-12' text='text-sm' %}
+                </div>
+                <div class="flex flex-col justify-center mr-4 w-1/6">
+                    <div class="font-semibold">
+                        {{review.user.first_name}}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        {{review.created|date:'F d Y'}}
+                    </div>
+                </div>
+                <span class="mx-4 border-l border-gray-400"></span>
+                <a class="flex flex-col justify-center w-2/3" href="{% url 'places:detail' review.place.pk %}">
+                    <div class="font-semibold overflow-hidden truncate">
+                        {{review.place.title}}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        <i class="fas fa-star text-pink-400 mr-1 text-sm"></i><span class="font-semibold">{{review.rating_avg}}</span>
+                    </div>
+                </a>
+            </div>
+            <div class="border-section">{{review.review}}</div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

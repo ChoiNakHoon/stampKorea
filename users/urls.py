@@ -20,4 +20,9 @@ urlpatterns = [
         views.resend_verification_email,
         name="resend-email",
     ),
+    path("<int:pk>", views.UserProfileView.as_view(), name="profile"),
+    path("update-profile/", views.UpdateProfileView.as_view(), name="user_update"),
+    path(
+        "update-password/", views.UpdatePasswordView.as_view(), name="password_update"
+    ),
 ]

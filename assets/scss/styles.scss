@@ -20,7 +20,10 @@
 }
 
 .btn_link {
-  @apply text-center rounded-lg py-2 font-light w-full bg-red-400 text-white;
+  @apply bg-transparent text-blue-700 font-light py-2 px-4 border border-blue-500 rounded;
+  &:hover {
+    @apply border-transparent text-white bg-blue-500;
+  }
 }
 
 .form_login {
