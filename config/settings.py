@@ -51,6 +51,7 @@ PROJECT_APPS = [
 # library Application definition
 THIRD_PARTY_APPS = [
     "django_countries",
+    "django_seed",
     "sslserver",
 ]
 
