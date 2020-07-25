@@ -20,6 +20,8 @@
         list.push(obj);
       {% endfor %}
 
+      var focus_marker = "{% static 'img/map-marker.svg' %}";
+      var marker = "{% static 'img/map-marker2.svg' %}";
     </script>
     <script type="text/javascript" src="{% static 'js/autocomplete.js'%}"></script>
     <title> {% block page_title %}{% endblock page_title %} | Nanum</title>
@@ -44,7 +46,8 @@
 
       <script>
         // autocomplete 부분을 생성
-        window.onload = function () { autocomplete.setAutocomplete(document.getElementById("autoInput"), list) }
+        window.onload = function () { autocomplete.setAutocomplete(document.getElementById("autoInput"), list) 
+        initMap2();}
       </script>
   {% include "partials/footer.html" %} 
   </body>
