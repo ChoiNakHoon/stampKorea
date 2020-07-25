@@ -16,8 +16,6 @@ class HomeView(ListView):
     # 최대 보여지는 max_index에 도달하고 next하게 되면
     # n번으로 제한된 만큼 페이지가 보여진다.
     def get(self, request):
-        search = []
-        search += places_models.Region.objects.all()
 
         queryset = places_models.Place.objects.filter(content_type="85").order_by(
             "-created"
@@ -45,7 +43,7 @@ class HomeView(ListView):
         return render(
             request,
             "places/places_list.html",
-            context={"places": places, "search": search, "page_range": page_range},
+            context={"places": places, "page_range": page_range},
         )
 
 
@@ -135,8 +133,6 @@ class SearchView(ListView):
         form = forms.SearchForm(request.GET)
         word = "%s" % self.request.GET["search"]  # 검색어
         result_word = word.capitalize()
-        search = []
-        search += places_models.Region.objects.all()
         queryset = places_models.Place.objects.filter(
             Q(region__name=result_word)
             | Q(region_sub__name=result_word)
@@ -175,7 +171,6 @@ class SearchView(ListView):
                     "form": form,
                     "places": places,
                     "page_range": page_range,
-                    "search": search,
                     "word": word,
                     "locations": locations,
                 },
@@ -185,8 +180,6 @@ class SearchView(ListView):
             form = forms.SearchForm()
 
         return render(
-            request,
-            "places/search.html",
-            context={"form": form, "search": search, "word": word,},
+            request, "places/search.html", context={"form": form, "word": word,},
         )
 

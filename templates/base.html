@@ -1,4 +1,4 @@
-{% load static %}
+{% load static get_region %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,19 +7,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="http://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+    <style> 
+      #contents::-webkit-scrollbar { 
+          display: none; 
+      } 
+    </style> 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDW40d3WlYRwpcWJYKc-Wy2SahTBkic4xo&callback=initMap&libraries=&v=weekly"
       defer
     ></script>
     <script>
+      {% get_region as search %}
       const list = [];
-      
       {% for i in search %}
         obj = '{{i}}';
         list.push(obj);
       {% endfor %}
-
       var focus_marker = "{% static 'img/map-marker.svg' %}";
       var marker = "{% static 'img/map-marker2.svg' %}";
     </script>
@@ -27,13 +31,13 @@
     <title> {% block page_title %}{% endblock page_title %} | Nanum</title>
   </head>
   <body class="font-light text-gray-700 mt-24">
-      <header class="container inset-0 max-w-full flex items-center justify-between px-6 h-20 border-b border-gray-400 fixed bg-white z-50">
+      <header class="container inset-0 max-w-full flex items-center justify-between px-2 h-20 border-b border-gray-400 fixed bg-white z-50">
         {% block search-bar %}
           <a href="{% url 'core:home' %}" class="mr-6">
-            <img class="w-8" src="{% static 'img/logo.png'%}" alt="logo" />
+            <img class="w-14 h-14" src="{% static 'img/logo.svg'%}" alt="logo" />
           </a>
-          <div class="flex items-center w-1/3">
-            <form method="GET" action="{% url 'places:search' %}" class="autocomplete w-1/3" id="search" onload="init()" autocomplete="off">
+          <div class="absolute ml-16 flex items-center w-full">
+            <form method="GET" action="{% url 'places:search' %}" class="autocomplete w-1/4" id="search" onload="init()" autocomplete="off">
                 <input 
                 class="search-box border px-5 py-3 w-full rounded-md shadow-md hover:shadow-lg text-sm font-semibold placeholder-gray-400 focus:outline-none"
                 name="search" placeholder="Search By Trip" id="autoInput">
