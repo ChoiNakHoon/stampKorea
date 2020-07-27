@@ -1,5 +1,5 @@
-<div class="common_input {% if field.errors %}has_error{% endif %}">
-    {{field}}
+<div class="{% if field.errors %}has_error{% endif %}">
+    {{field.id_first_name.label}}
     {% if field.errors %}
         {% for error in field.errors %}
             <span class="text-red-700 font-medium text-sm">{{error}}</span>

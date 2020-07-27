@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block page_title %} User Profile Update {% endblock %}
+
+{% block content %}
+    {% include "mixins/auth/update_profile_form.html" with form=form cta="Save" %}
+{% endblock content %}

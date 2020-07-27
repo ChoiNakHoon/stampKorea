@@ -1,0 +1,181 @@
+{% load static %}
+<form method="POST" class="container flex mx-auto h-100vh" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <span class="text-red-700 font-medium text-sm">{{error}}</span>
+        {% endfor %}
+    {% endif %}
+    <div class="flex flex-col w-1/4 h-75vh mx-auto items-center my-10 p-10 border border-gray-400 rounded-lg">
+        {% include 'mixins/user_avatar.html' with user=user %}
+        <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+            {{user.first_name}}'s Avatar
+        </label>
+        <div class="flex flex-col w-full mt-8 px-4 border-t border-gray-400">            
+            <div class="overflow-hidden relative w-full mt-6 mb-4">
+                <button class="bg-blue-500 text-white font-light py-2 px-4 w-full border border-blue-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-blue-600">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span class="ml-2">Upload Image</span>
+                    <input type="file" name="avatar" accept="image/*" id="id_avatar">  
+                </button>
+
+                {% if user.avatar %}
+                    <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                        Clear
+                        <input type="checkbox" name="avatar-clear" id="avatar-clear_id">
+                    </label>
+                {% endif %}
+                    
+            </div>
+            <button class="bg-transparent text-white font-light py-2 px-4 border border-teal-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-teal-600">{{cta}}</button>
+        </div>
+        {% if user.login_method == "email" %}
+            <div class="mt-5 font-light">
+                <a class="block uppercase tracking-wide text-teal-500 text-md font-bold mb-2" href="{% url 'users:password_update' %}">Change Password</a>
+            </div>
+        {% endif%}
+    </div>
+    <div class="flex flex-col inset-0 w-3/5 my-10 mb-4 h-80vh overflow-y-scroll" id="contents">
+        <div class="flex flex-col w-2/3 border-b border-gray-400 pb-6">
+            <h1 class="text-3xl font-semibold">Personal info</h1>
+            <div class="flex justify-between pt-10">
+                <div class="flex flex-col">
+                    <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                        User name
+                    </label>
+                    <span class="user_name">{{user.first_name}}{{user.last_name}}</span>
+                </div>
+                <a class="flex items-center justify-center uppercase text-teal-500 text-center text-lg font-semibold rounded" id="click_name" onclick="init_show('name')">edit</a>
+            </div>
+            <div id="show_name" class="hidden">
+                <div class="pt-4">
+                    <h1 class="block tracking-wide text-gray-700 text-md font-light mb-2">This is the name on your travel document, which could be a license or a passport.</h1>
+                </div>
+                <div class="flex flex-row py-6" >
+                    <div class="w-1/2 pr-2">
+                        <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                            Fist name
+                        </label>
+                        <span>{{form.first_name}}</span>
+                    </div>
+                    <div class="w-1/2 pr-2">
+                        <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                            Last name
+                        </label>
+                        <span>{{form.last_name}}</span>
+                    </div>
+                </div>
+                <button class="bg-transparent text-white font-light py-2 px-4 border border-teal-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-teal-600">{{cta}}</button>
+            </div>
+        </div>
+        <div class="flex flex-col w-2/3 border-b border-gray-400 pb-6">
+            <div class="flex justify-between pt-10">
+                <div class="flex flex-col">
+                    <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                        Gender
+                    </label>
+                    <span class="uppercase user_gender">{{user.gender}}</span>
+                </div>
+                <a class="flex items-center justify-center uppercase text-teal-500 text-center text-lg font-semibold rounded" id="click_gender" onclick="init_show('gender')">edit</a>
+            </div>
+            <div id="show_gender" class="hidden w-2/3">
+                <div class="flex flex-row py-6" >
+                    <div class="relative">
+                            {{form.gender}}
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                    </div>
+                </div>
+                <button class="bg-transparent text-white font-light py-2 px-4 border border-teal-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-teal-600">{{cta}}</button>
+            </div>
+        </div>
+        <div class="flex flex-col w-2/3 border-b border-gray-400 pb-6">
+            <div class="flex justify-between pt-10">
+                <div class="flex flex-col">
+                    <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                        Date of birth
+                    </label>
+                    <span class="uppercase user_birth">{{user.birthdate}}</span>
+                </div>
+                <a class="flex items-center justify-center uppercase text-teal-500 text-center text-lg font-semibold rounded" id="click_birth" onclick="init_show('birth')">edit</a>
+            </div>
+            <div id="show_birth" class="hidden w-2/3">
+                <div class="flex flex-row py-6" >
+                    <div class="relative">
+                            {{form.birthdate}}
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                    </div>
+                </div>
+                <button class="bg-transparent text-white font-light py-2 px-4 border border-teal-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-teal-600">{{cta}}</button>
+            </div>
+        </div>
+        <div class="flex flex-col w-2/3 border-b border-gray-400 pb-6">
+            <div class="flex justify-between pt-10">
+                <div class="flex flex-col">
+                    <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                        About
+                    </label>
+                    <span class="uppercase user_about">{{user.bio}}</span>
+                </div>
+                <a class="flex items-center justify-center uppercase text-teal-500 text-center text-lg font-semibold rounded" id="click_about" onclick="init_show('about')">edit</a>
+            </div>
+            <div id="show_about" class="hidden">
+                <div class="flex flex-row py-6" >
+                    <div class="relative w-full">
+                            {{form.bio}}
+                    </div>
+                </div>
+                <button class="bg-transparent text-white font-light py-2 px-4 border border-teal-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-teal-600">{{cta}}</button>
+            </div>
+        </div>
+        <div class="flex flex-col w-2/3 border-b border-gray-400 pb-6">
+            <div class="flex justify-between pt-10">
+                <div class="flex flex-col">
+                    <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                        Currency
+                    </label>
+                    <span class="uppercase user_currency">{{user.currency}}</span>
+                </div>
+                <a class="flex items-center justify-center uppercase text-teal-500 text-center text-lg font-semibold rounded" id="click_currency" onclick="init_show('currency')">edit</a>
+            </div>
+            <div id="show_currency" class="hidden w-2/3">
+                <div class="flex flex-row py-6" >
+                    <div class="relative">
+                            {{form.currency}}
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                    </div>
+                </div>
+                <button class="bg-transparent text-white font-light py-2 px-4 border border-teal-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-teal-600">{{cta}}</button>
+            </div>
+        </div>
+        <div class="flex flex-col w-2/3 border-b border-gray-400 pb-6">
+            <div class="flex justify-between pt-10">
+                <div class="flex flex-col">
+                    <label class="block uppercase tracking-wide text-gray-700 text-md font-bold mb-2" for="grid-state">
+                        Language
+                    </label>
+                    <span class="uppercase user_language">{{user.language}}</span>
+                </div>
+                <a class="flex items-center justify-center uppercase text-teal-500 text-center text-lg font-semibold rounded" id="click_language" onclick="init_show('language')">edit</a>
+            </div>
+            <div id="show_language" class="hidden w-2/3">
+                <div class="flex flex-row py-6" >
+                    <div class="relative">
+                            {{form.language}}
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                    </div>
+                </div>
+                <button class="bg-transparent text-white font-light py-2 px-4 border border-teal-500 bg-teal-500 font-bold rounded focus:outline-none hover:bg-teal-600">{{cta}}</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="{% static 'js/show_hide.js'%}"></script>

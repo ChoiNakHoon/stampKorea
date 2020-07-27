@@ -1,9 +1,9 @@
 <!-- 프로필 사진 -->
 {% if user.avatar %}
-    <img class="{{h_and_w|default:'h-40 w-40'}} rounded-full bg-cover" src="{{user.avatar.url}}"/>
+    <img class="{{h_and_w|default:'h-25vh w-25vh'}} rounded-full bg-cover" src="{{user.avatar.url}}"/>
 {% else %}
-    <div class="{{h_and_w|default:'h-40 w-40'}} bg-blue-500 rounded-full text-white justify-center flex items-center overflow-hidden">
-        <span class="{{text|default:'text-3xl'}} flex pb-1">{{user.first_name|first}}</span>
+    <div class="{{h_and_w|default:'h-25vh w-25vh'}} bg-blue-500 rounded-full text-white justify-center flex items-center text-center overflow-hidden">
+        <span class="{{text|default:'text-6xl'}} flex justify-center text-center pb-1">{{user.first_name|first}}</span>
     </div>
 {% endif %}
     

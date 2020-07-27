@@ -3,6 +3,7 @@ import uuid
 import requests
 from django.views.generic import FormView, DetailView, UpdateView
 from django.shortcuts import redirect, reverse, render
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordChangeView
@@ -270,6 +271,7 @@ class UpdateProfileView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView
 
     model = models.User
     template_name = "users/update_profile.html"
+    success_url = reverse_lazy("users:user_update")
     fields = (
         "first_name",
         "last_name",
@@ -290,6 +292,7 @@ class UpdateProfileView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView
         form.fields["last_name"].widget.attrs = {"placeholder": "Last_name"}
         form.fields["gender"].widget.attrs = {"placeholder": "Gender"}
         form.fields["birthdate"].widget.attrs = {"placeholder": "Birth Date"}
+        form.fields["bio"].widget.attrs = {"placeholder": "About"}
         form.fields["language"].widget.attrs = {"placeholder": "Language"}
         form.fields["currency"].widget.attrs = {"placeholder": "Currency"}
         return form
