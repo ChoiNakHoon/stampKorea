@@ -1,5 +1,9 @@
 @tailwind base;
 
+.font-montserrat {
+  font-family: "Open Sans", sans-serif;
+}
+
 @tailwind components;
 
 .search-box {
@@ -57,6 +61,12 @@ form {
   @apply border-b border-gray-400 pb-8 mt-8;
 }
 
+#id_first_name,
+#id_last_name,
+#id_gender,
+#id_birthdate,
+#id_language,
+#id_currency,
 #id_accuracy,
 #id_safety,
 #id_communication,
@@ -68,6 +78,7 @@ form {
   }
 }
 
+#id_bio,
 #id_review {
   @apply appearance-none block w-full h-20 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight;
   &:focus {
@@ -94,4 +105,7 @@ div.autocomplete-active {
   @apply bg-blue-400 w-auto text-white;
 }
 
+#id_avatar {
+  @apply cursor-pointer absolute block py-2 px-4 w-full opacity-0 right-0 top-0;
+}
 @tailwind utilities;
