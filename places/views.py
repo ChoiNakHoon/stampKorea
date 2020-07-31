@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from places import models as places_models
 from reviews import forms as reviews_forms
+from lists import forms as lists_forms
 from . import forms
 
 
@@ -55,74 +56,59 @@ class PlaceDetailView(View):
         pk = kwargs.get("pk")
         place = places_models.Place.objects.get(pk=pk)
         form = reviews_forms.CreateReviewForm()
+        list_form = lists_forms.CreateListForm()
         if place.content_type == "85":
             return render(
                 self.request,
                 "places/place_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         elif place.content_type == "76":
             return render(
                 self.request,
                 "places/place_nature_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         elif place.content_type == "78":
             return render(
                 self.request,
                 "places/place_culture_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         elif place.content_type == "75":
             return render(
                 self.request,
                 "places/place_sports_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         elif place.content_type == "80":
             return render(
                 self.request,
                 "places/place_accommodation_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         elif place.content_type == "82":
             return render(
                 self.request,
                 "places/place_cuisine_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         elif place.content_type == "79":
             return render(
                 self.request,
                 "places/place_shopping_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         elif place.content_type == "77":
             return render(
                 self.request,
                 "places/place_transportation_detail.html",
-                context={"place": place, "form": form},
+                context={"place": place, "form": form, "list_form": list_form},
             )
         else:
             return render(
                 self.request, "places/places_list.html", context={"place": place,},
             )
-
-
-class PlaceNatureDetail(View):
-
-    """ Detail View Definition """
-
-    def get(self, *args, **kwargs):
-
-        pk = kwargs.get("pk")
-        place = places_models.Place.objects.get(pk=pk)
-        form = reviews_forms.CreateReviewForm()
-        return render(
-            self.request,
-            "places/place_detail.html",
-            context={"place": place, "form": form},
-        )
 
 
 class SearchView(ListView):

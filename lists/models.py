@@ -1,5 +1,6 @@
 from django.db import models
 from core import models as core_models
+from places import models as place_models
 
 
 class List(core_models.TimeStampedModel):
@@ -18,3 +19,12 @@ class List(core_models.TimeStampedModel):
         return self.place.count()
 
     count_place.short_description = "Number of Trips"
+
+    def get_first_thumbnail(self):
+        for place in self.place.all():
+            _place = place_models.Place.objects.get(pk=place.pk)
+        try:
+            (photo,) = _place.photos.all()[:1]
+            return photo.url
+        except ValueError:
+            return None

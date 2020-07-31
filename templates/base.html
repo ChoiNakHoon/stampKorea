@@ -12,6 +12,48 @@
       #contents::-webkit-scrollbar { 
           display: none; 
       } 
+
+      .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+      }
+  
+      .animated.faster {
+        -webkit-animation-duration: 500ms;
+        animation-duration: 500ms;
+      }
+  
+      .fadeIn {
+        -webkit-animation-name: fadeIn;
+        animation-name: fadeIn;
+      }
+  
+      .fadeOut {
+        -webkit-animation-name: fadeOut;
+        animation-name: fadeOut;
+      }
+  
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+  
+        to {
+          opacity: 1;
+        }
+      }
+  
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+  
+        to {
+          opacity: 0;
+        }
+      }
     </style> 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script
@@ -49,8 +91,10 @@
           {% endblock search-bar %}
           {% include "partials/nav.html" %}
       </header>
-        {% block content %} {% endblock content %}
-
+        {% block content %} 
+        {% endblock content %}
+        {% include "mixins/fav_modal.html" with place=place %}
+      <script type="text/javascript" src="{% static 'js/onFavModal.js'%}"></script>
       <script>
         // autocomplete 부분을 생성
         window.onload = function () { autocomplete.setAutocomplete(document.getElementById("autoInput"), list) 

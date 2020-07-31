@@ -7,8 +7,9 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def on_favs(context, place):
     user = context.request.user
-    the_list = list_models.List.objects.get(user=user, name="My Favourites Houses")
+    _list = context.get("lists")
+    the_list = list_models.List.objects.get(user=user, title=_list)
     if the_list is not None:
-        return place in the_list.places.all()
+        return place in the_list.place.all()
     else:
         return False

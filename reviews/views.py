@@ -19,6 +19,3 @@ def create_review(request, place):
             review.save()
             messages.success(request, "Success Reviewed")
             return redirect(reverse("places:detail", kwargs={"pk": place.pk}))
-
-
-# Create your views here.
