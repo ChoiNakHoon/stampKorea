@@ -1,0 +1,5 @@
+{% if place.get_likes_count %}
+<a href="#" class="rounded-md hover:bg-gray-200 px-1" onclick="onFavModal();"><i class="fas fa-heart text-lg text-red-400 mr-2"></i><span class="font-semibold text-lg">{{place.get_likes_count}}</span></a>
+{% else %}
+<a href="#" class="rounded-md hover:bg-gray-200" onclick="onFavModal();"><i class="far fa-heart text-lg text-red-400"></i></a>
+{% endif %}
