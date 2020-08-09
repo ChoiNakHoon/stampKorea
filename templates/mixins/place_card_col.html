@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="overflow-hidden">
-    <a href="{% url 'places:detail' place.pk %}" class="flex flex-row border-b border-gray-400 mt-4 py-4" onmouseenter="init_Map({{place.mapx}}, {{place.mapy}});">
+    <a href="{% url 'places:detail' place.pk %}" class="flex flex-row border-t border-gray-400 mt-4 py-4" onmouseenter="init_Map({{place.mapx}}, {{place.mapy}});">
         {% if place.first_photo is None %}
             <div class="w-40vh h-25vh bg-cover bg-center rounded-lg shadow-md hover:shadow-lg mb-2 mr-4">
                 <div class="w-full h-full bg-cover bg-center"
