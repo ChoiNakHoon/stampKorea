@@ -21,21 +21,23 @@
         obj = '{{i}}';
         list.push(obj);
       {% endfor %}
+      console.log(list);
       var focus_marker = "{% static 'img/map-marker.svg' %}";
       var marker = "{% static 'img/map-marker2.svg' %}";
     </script>
-    <script type="text/javascript" src="{% static 'js/autocomplete.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/autocomplete.js'%}" defer></script>
+    <script type="text/javascript" src="{% static 'js/scrollEvent.js'%}" defer></script>
     <title> {% block page_title %}{% endblock page_title %} | Nanum</title>
   </head>
   <body class="font-light text-gray-700 mt-24">
-      <header class="container inset-0 max-w-full flex items-center justify-between px-2 h-20 border-b border-gray-400 fixed bg-white z-50">
+      <header id="main_menu" class="container inset-0 max-w-full flex items-center justify-between px-2 h-20 fixed bg-black z-50">
         {% block search-bar %}
           <a href="{% url 'core:home' %}" class="mr-6 flex flex-wrap">
-            <h3 class="text-black font-light font-montserrat text-2xl mr-px">Stamp</h3>
+            <h3 class="text-white font-light font-montserrat text-2xl mr-px">Stamp</h3>
             <h3 class="text-blue-500 font-extrabold text-lg">Kr</h3>
             <!-- <img class="flex absolute w-14 h-14" src="{% static 'img/logo.svg'%}" alt="logo" /> -->
           </a>
-          <div class="absolute ml-32 flex items-center w-full">
+          <div class="absolute ml-32 flex items-center w-full" id="search_bar">
             <form method="GET" action="{% url 'places:search' %}" class="autocomplete w-1/4" id="search" onload="init()" autocomplete="off">
                 <input 
                 class="search-box border px-5 py-3 w-full rounded-md shadow-md hover:shadow-lg text-sm font-semibold placeholder-gray-400 focus:outline-none"
