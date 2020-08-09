@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block page_title %}
+{{user.first_name}}'s List
+{% endblock page_title%}
+
+{% block content %}
+<div class="container xl:w-1/4 lg:w-5/12 md:w-1/2 mx-auto my-10 flex flex-col items-center p-6 border border-gray-400">
+    {% include 'mixins/user_avatar.html' with user=user %}
+    <div class="flex items-center">
+        <span class="text-3xl mt-1">{{user.first_name}}</span>
+    </div>
+    {% if user == user %}
+        <a href="{% url 'users:user_update' %}" class="btn_link mt-2">Edit Profile</a>
+    {% endif %}
+</div>
+
+<!-- User는 List 를 여려개 가질 수 있다. list에 대한 USER는 FK-->
+<!-- List는 여러개의 Room을 가질 수 있고 Room역시 여러개의 List를 가질 수 있다. ManyToMany-->
+{% if user.lists.all %}
+<div class="container mx-auto pb-10 flex flex-col items-center">
+    <div class="w-full flex flex-wrap items-center">
+       <!-- 현재 저장 된 List name 가져 온다. -->
+        {% for list in user.lists.all %}
+        <span class="text-black w-11/12 truncate block">{{list.title}}</span>
+         <!-- 현재 데이터 베이스에 있는 방 이름과 가격을 가져 옵니다. -->
+            {% for place in list.place.all %}
+            <!-- for-in 통해 넘겨준 room variavble 인자 넘길때 띄워쓰기 하면 안 됨-->
+            {% include 'mixins/place_card.html' with place=place %}
+            {% endfor%}
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+    <div class="h-auto my-75vh"></div>
+{% endif %}
+
+{% endblock content %}

@@ -8,53 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="http://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="{% static 'css/styles.css'%}">
-    <style> 
-      #contents::-webkit-scrollbar { 
-          display: none; 
-      } 
-
-      .animated {
-        -webkit-animation-duration: 1s;
-        animation-duration: 1s;
-        -webkit-animation-fill-mode: both;
-        animation-fill-mode: both;
-      }
-  
-      .animated.faster {
-        -webkit-animation-duration: 500ms;
-        animation-duration: 500ms;
-      }
-  
-      .fadeIn {
-        -webkit-animation-name: fadeIn;
-        animation-name: fadeIn;
-      }
-  
-      .fadeOut {
-        -webkit-animation-name: fadeOut;
-        animation-name: fadeOut;
-      }
-  
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-  
-        to {
-          opacity: 1;
-        }
-      }
-  
-      @keyframes fadeOut {
-        from {
-          opacity: 1;
-        }
-  
-        to {
-          opacity: 0;
-        }
-      }
-    </style> 
+    <link rel="stylesheet" href="{% static 'css/common.css'%}">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDW40d3WlYRwpcWJYKc-Wy2SahTBkic4xo&callback=initMap&libraries=&v=weekly"
@@ -95,6 +49,7 @@
         {% endblock content %}
         {% include "mixins/fav_modal.html" with place=place %}
       <script type="text/javascript" src="{% static 'js/onFavModal.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/carousel.js'%}"></script>
       <script>
         // autocomplete 부분을 생성
         window.onload = function () { autocomplete.setAutocomplete(document.getElementById("autoInput"), list) 

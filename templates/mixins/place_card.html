@@ -1,7 +1,6 @@
 {% load static %}
 
 <div class="w-1/4 mb-10 px-2 overflow-hidden">
-    {{place.content_type}}
     <a href="{% url 'places:detail' place.pk %}">
         
         {% if place.first_photo is None %}

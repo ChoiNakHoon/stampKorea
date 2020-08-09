@@ -3,7 +3,7 @@
     
     {% if user.is_authenticated %}
         
-    <li class="nav_link"><a href="#">Trip List</a></li>
+    <li class="nav_link"><a href="{% url 'lists:trip-list' %}">Trip List</a></li>
     <li class="nav_link">
         <a href="{{user.get_absolute_url}}">Profile</a>
     </li>

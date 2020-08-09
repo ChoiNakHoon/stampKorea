@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, reverse
+from django.views.generic import TemplateView
 from django.contrib import messages
 from django.db.models import Q
 from places import models as place_models
@@ -47,5 +48,7 @@ def add_list(request, place, title):
     return redirect(reverse("places:detail", kwargs={"pk": place.pk}))
 
 
-class TripListView:
-    pass
+class TripListView(TemplateView):
+    """ SeeFav View Definition """
+
+    template_name = "lists/list.html"
