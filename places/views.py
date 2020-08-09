@@ -1,3 +1,4 @@
+import random
 import json
 from django.views.generic import ListView, View
 from django.db.models import Q
@@ -22,6 +23,9 @@ class HomeView(ListView):
             "-created"
         )
 
+        bList = list(queryset)
+        fastival_list = random.sample(bList, 5)
+
         paginator = Paginator(queryset, 12, orphans=1)
 
         page = request.GET.get("page", 1)
@@ -44,7 +48,11 @@ class HomeView(ListView):
         return render(
             request,
             "places/places_list.html",
-            context={"places": places, "page_range": page_range},
+            context={
+                "places": places,
+                "page_range": page_range,
+                "fastival_list": fastival_list,
+            },
         )
 
 

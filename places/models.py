@@ -285,10 +285,16 @@ class Place(core_models.TimeStampedModel):
     get_likes_count.short_description = ".Like"
 
     def get_start_date(self):
-        return datetime.strptime(self.eventstartdate, "%Y%m%d").date()
+        if self.eventstartdate is not None:
+            return datetime.strptime(self.eventstartdate, "%Y%m%d").date()
+        else:
+            return timezone.now().date()
 
     def get_end_date(self):
-        return datetime.strptime(self.eventenddate, "%Y%m%d").date()
+        if self.eventenddate is not None:
+            return datetime.strptime(self.eventenddate, "%Y%m%d").date()
+        else:
+            return timezone.now().date()
 
     # 현재 시간에서 진행이 가능 한 경우
     def is_progress(self):

@@ -61,6 +61,7 @@ form {
   @apply border-b border-gray-400 pb-8 mt-8;
 }
 
+#id_title,
 #id_first_name,
 #id_last_name,
 #id_gender,
@@ -108,4 +109,5 @@ div.autocomplete-active {
 #id_avatar {
   @apply cursor-pointer absolute block py-2 px-4 w-full opacity-0 right-0 top-0;
 }
+
 @tailwind utilities;

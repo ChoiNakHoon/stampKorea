@@ -2,44 +2,91 @@
 {% block page_title %} Home {% endblock %}
 
 {% block content %}
-<div class="container mx-auto mb-20">
-    <div class="flex flex-wrap">
-        <!-- 현재 데이터 베이스에 있는 축제 정보를 가져 옵니다. -->
-        {% for place in places %}
-            
-            {% if place.is_progress %}
-                <!-- for문으로 통해 넘겨준 place value값을 넘깁니다. -->
-                {% include 'mixins/place_card.html' with place=place %}
-            {% endif %}
-                
-        {% endfor %}
-    </div>
-    <!-- PAGINATOR -->
 
-    <div class>
-        <nav>
-            {% if page_obj.has_previous %}
-                <a href="?page=1">First</a>
-                <a href="?page={{page_obj.previous_page_number}}">Previous</a>
-            {% endif %}
-        
-            <!-- 페이지의 갯수 만큼 Loop -->
-            {% for index in page_range %}
-            <!-- current page -->
-            {% if page_obj.number == index %}
-                    <span>{{index}}</span>
-                {% else %}
-                <!-- current page가 아니라면 -->
-                    <a href="?page={{index}}">{{index}}</a>
-                {% endif %}
-        
-            {% endfor %}
-        
-            {% if page_obj.has_next %}
-                <a href="?page={{page_obj.next_page_number}}">Next</a>
-                <a href="?page={{page_obj.paginator.num_pages}}">Last</a>
-            {% endif %}
-        </nav>
+<div class="container" id="slide_container">
+    <div class="slide_wrap">
+        <div class="slide_box w-full m-auto overflow-x-hidden rounded-lg">
+            <div class="slide_list clearfix">
+                
+                {% for place in fastival_list %}
+                        {% if place %}
+                        <div class="slide_content">
+                            <div class="container flex h-full justify-center items-center mx-auto content-div">
+                                <div style="background-image: url('{{place.first_photo}}');" class="group w-full h-full hover:opacity-25">
+                                    {% if place.is_progress and place.get_end_date %}
+                                        <div class="w-full image-cover bg-cover bg-center rounded-t-md">
+                                            <div class="p-px pt-3 mr-4 mt-4 w-20 h-20 text-center items-center bg-green-400 rounded-full text-white float-right fd-cl group-hover:opacity-25">
+                                                <span class="text-base tracking-wide font-light border-b border-white">{{place.get_end_date | date:'d'}}</span>
+                                                <span class="text-xs tracking-wide font-light uppercase block">{{place.get_end_date | date:'F'}}</span>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="w-full image-cover bg-cover bg-center rounded-t-md">
+                                            <div class="p-px pt-3 mr-4 mt-4 w-20 h-20 text-center items-center bg-red-400 rounded-full text-white float-right fd-cl group-hover:opacity-25">
+                                                <span class="text-base tracking-wide font-light border-b border-white">{{place.get_end_date | date:'d'}}</span>
+                                                <span class="text-xs tracking-wide font-light uppercase block">{{place.get_end_date | date:'F'}}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                
+                                    <div class="py-8 px-4 bg-white fd-cl group-hover:opacity-0">
+                                        <span class="block text-lg text-gray-800 font-bold tracking-wide">{{place.title}}</span>
+                                        <span class="block text-gray-600 text-sm w-full">
+                                        {% if place.overview %}
+                                            {{place.overview | safe }}
+                                        {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
+                                    <span class="w-1/2 text-xl font-bold text-white tracking-wider leading-relaxed truncate">{{place.title}}</span> 
+                                    
+                                    {% if place.is_progress %}                            
+                                        <div class="pt-8 text-center">
+                                            <a href="{% url 'places:detail' place.pk %}" class="bg-transparent hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">More</a>
+                                        </div>
+                                    {% else %}
+                                        <div class="pt-8 text-center">
+                                            <a class="bg-transparent hover:bg-red-700 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">Closed</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                {% endfor %}
+            </div>
+            <!-- Slider list -->
+            <div class="slide_btn_box w-full flex justify-between inset-0 group-hover:opacity-0">
+                <button type="button" class="slide_btn_prev focus:outline-none"><i class="fas fa-angle-left text-3xl text-white"></i></button>
+                <button type="button" class="slide_btn_next focus:outline-none"><i class="fas fa-angle-right text-3xl text-white"></i></button>
+            </div>
+            <!-- Btn Box -->
+        </div>
+        <!-- slide box -->
+        <ul class="slide_pagination"></ul>
+        <!-- Slide Pagination -->
+    </div>
+    <!-- Slide Wrap -->
+</div>
+<!-- Slide Container -->
+<div class="container mx-auto my-8">
+    <h3 class="text-black text-3xl font-semibold">Top destinations</h3>
+    <div class="py-8">
+        <div class="images grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-8"> 
+            <div class="image bg-white rounded-lg shadow-lg overflow-hidden w-40vh">
+                <a href="{% url 'places:search' %}?search=Seoul">
+                    <img src="https://a0.muscache.com/im/pictures/80b77c41-e1e1-448d-99d6-8af4ace28d1b.jpg?aki_policy=large" alt="Write your feedback" title="Write your feedback">
+                    <span class="text-center p-2 text-gray-700 text-sm inline-block w-full">Seoul</span>
+                </a>                        
+            </div>
+            <div class="image bg-white rounded-lg shadow-lg overflow-hidden w-40vh">
+                <a href="{% url 'places:search' %}?search=Busan">
+                    <img src="https://a0.muscache.com/im/pictures/80b77c41-e1e1-448d-99d6-8af4ace28d1b.jpg?aki_policy=large" alt="Write your feedback" title="Write your feedback">
+                    <span class="text-center p-2 text-gray-700 text-sm inline-block w-full">Busan</span>
+                </a>                        
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
