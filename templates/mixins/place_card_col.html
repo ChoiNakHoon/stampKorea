@@ -1,22 +1,22 @@
 {% load static %}
 
 <div class="overflow-hidden">
-    <a href="{% url 'places:detail' place.pk %}" class="flex flex-row border-t border-gray-400 mt-4 py-4" onmouseenter="init_Map({{place.mapx}}, {{place.mapy}});">
+    <a href="{% url 'places:detail' place.pk %}" class="flex flex-row border-t border-gray-400 py-4" onmouseenter="init_Map({{place.mapx}}, {{place.mapy}});">
         {% if place.first_photo is None %}
-            <div class="w-40vh h-25vh bg-cover bg-center rounded-lg shadow-md hover:shadow-lg mb-2 mr-4">
+            <div class="w-30vh h-25vh bg-cover bg-center rounded-lg shadow-md hover:shadow-lg mb-2 mr-4">
                 <div class="w-full h-full bg-cover bg-center"
                     style="background-image: url({% static 'img/add_image_error.png'%});">
                 </div>
             </div>
         {% else %}
-        <div class="w-40vh h-25vh bg-cover bg-center rounded-lg shadow-md hover:shadow-lg mb-2 mr-4"
+        <div class="w-30vh h-25vh bg-cover bg-center rounded-lg shadow-lg hover:shadow-lg mb-2 mr-4"
             style="background-image: url({{place.first_photo}});">
         </div>
         {% endif %}
         <!-- 카드 아래 text 링크 css 작업 -->
         <div class="w-1/2 flex flex-col">
-            <span class="w-1/2 text-black text-lg block truncate overflow-hidden">{{place.cat_type}}</span>
-            <span class="w-1/2 text-black text-3xl block truncate overflow-hidden">{{place.title}}</span>
+            <span class="text-teal-600 text-sm font-montserrat block overflow-hidden">{{place.cat_type}}</span>
+            <span class="w-full text-black text-base truncate overflow-hidden">{{place.title}}</span>
             <div class="w-full overflow-hidden">
                 <span class="text-sm text-gray-600 font-light">{{place.region.name}}, {{place.region_sub.name}}</span>
             </div>

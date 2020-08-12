@@ -5,14 +5,14 @@
 
 <div class="container" id="slide_container">
     <div class="slide_wrap">
-        <div class="slide_box w-full m-auto overflow-x-hidden rounded-lg">
-            <div class="slide_list clearfix">
+        <div class="slide_box w-full h-60vh m-auto overflow-x-hidden overflow-y-hidden shadow-md" id="contents">
+            <div class="slide_list clearfix h-full">
                 
                 {% for place in fastival_list %}
                         {% if place %}
-                        <div class="slide_content">
-                            <div class="container flex h-full justify-center items-center mx-auto content-div">
-                                <div style="background-image: url('{{place.first_photo}}');" class="rounded-t-md rounded-b-md group bg-center bg-cover w-full h-full hover:opacity-25">
+                        <div class="slide_content h-full">
+                            <div class="flex justify-center items-center mx-auto content-div">
+                                <div style="background-image: url('{{place.first_photo}}');" class="fd-cl bg-cover hover:opacity-25">
                                     {% if place.is_progress and place.get_end_date %}
                                         <div class="w-full image-cover bg-cover bg-center">
                                             <div class="p-px pt-3 mr-4 mt-4 w-20 h-20 text-center items-center bg-green-400 rounded-full text-white float-right fd-cl group-hover:opacity-25">
@@ -29,25 +29,26 @@
                                         </div>
                                     {% endif %}
                                 
-                                    <div class="py-8 px-4 bg-white fd-cl group-hover:opacity-0">
-                                        <span class="block text-lg text-gray-800 font-bold tracking-wide">{{place.title}}</span>
-                                        <span class="block text-gray-600 text-sm w-full">
+                                    <div class="py-8 px-4 bg-white group-hover:opacity-0 overflow-y-scroll" id="contents">
+                                        <span class="block text-lg text-gray-800 font-bold tracking-wide pb-2 uppercase">{{place.title}}</span>
+                                        <span class="block text-sm text-gray-600 w-full overflow-y-scroll" id="contents">
                                         {% if place.overview %}
-                                            {{place.overview | safe }}
+                                            {{place.overview | slice:":300" | safe}}
                                         {% endif %}
+                                        ...
                                         </span>
                                     </div>
                                 </div>
-                                <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
-                                    <span class="w-1/2 text-3xl font-bold text-white tracking-wider leading-relaxed truncate">{{place.title}}</span> 
+                                <div class="absolute opacity-0 fd-sh items-center group-hover:opacity-100">
+                                    <span class="text-xl font-bold text-white tracking-wider leading-relaxed">{{place.title}}</span> 
                                     
                                     {% if place.is_progress %}                            
                                         <div class="pt-8 text-center">
-                                            <a href="{% url 'places:detail' place.pk %}" class="bg-transparent hover:bg-blue-700 text-blue-700 font-semibold text-xl hover:text-white py-3 px-6 border border-blue-500 hover:border-transparent rounded">More</a>
+                                            <a href="{% url 'places:detail' place.pk %}" class="bg-transparent hover:bg-blue-700 text-blue-700 font-semibold text-xl hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">More</a>
                                         </div>
                                     {% else %}
                                         <div class="pt-8 text-center">
-                                            <a class="bg-transparent hover:bg-red-700 text-red-700 font-semibold text-xl hover:text-white py-3 px-6 border border-red-500 hover:border-transparent rounded">Closed</a>
+                                            <a class="bg-transparent hover:bg-red-700 text-red-700 font-semibold text-xl hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">Closed</a>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -57,7 +58,7 @@
                 {% endfor %}
             </div>
             <!-- Slider list -->
-            <div class="slide_btn_box w-full flex justify-between inset-0 group-hover:opacity-0">
+            <div class="slide_btn_box w-full flex justify-between inset-0 opacity-50">
                 <button type="button" class="slide_btn_prev focus:outline-none"><i class="fas fa-angle-left text-3xl text-white"></i></button>
                 <button type="button" class="slide_btn_next focus:outline-none"><i class="fas fa-angle-right text-3xl text-white"></i></button>
             </div>
