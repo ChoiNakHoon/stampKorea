@@ -92,11 +92,11 @@ form {
 }
 
 .autocomplete-items {
-  @apply absolute border w-auto border-gray-100 rounded-md border-b-0 border-t-0 z-50 top-auto left-0 right-0;
+  @apply absolute border w-auto h-auto border-gray-100 border-b-0 border-t-0 z-50 top-auto left-0 right-0;
 }
 
 .autocomplete-items div {
-  @apply p-2 cursor-pointer w-auto bg-white border-b border-gray-400 rounded-md;
+  @apply p-2 cursor-pointer w-auto bg-white border-b border-gray-400 uppercase text-black;
   &:hover {
     @apply bg-blue-400;
   }

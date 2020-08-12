@@ -19,9 +19,9 @@ class HomeView(ListView):
     # n번으로 제한된 만큼 페이지가 보여진다.
     def get(self, request):
 
-        queryset = places_models.Place.objects.filter(content_type="85").order_by(
-            "-created"
-        )
+        queryset = places_models.Place.objects.filter(
+            Q(content_type="85") & Q(photos__isnull=False)
+        ).order_by("-created")
 
         bList = list(queryset)
         fastival_list = random.sample(bList, 5)
@@ -127,19 +127,31 @@ class SearchView(ListView):
         form = forms.SearchForm(request.GET)
         word = "%s" % self.request.GET["search"]  # 검색어
         result_word = word.capitalize()
-        queryset = places_models.Place.objects.filter(
-            Q(region__name=result_word)
-            | Q(region_sub__name=result_word)
-            | Q(cat_type__name=result_word)
-        ).distinct()
+
         if form.is_valid():
+
+            cat_type = form.cleaned_data.get("cat_type")
+
+            queryset = places_models.Place.objects.filter(
+                Q(
+                    Q(region__name__contains=result_word)
+                    | Q(region_sub__name__contains=result_word)
+                    | Q(cat_type__name__contains=result_word)
+                )
+                & Q(photos__isnull=False)
+            ).distinct()
+
+            if cat_type is not None:
+                queryset = queryset.filter(cat_type=cat_type)
+            queryset.values()
+
             paginator = Paginator(queryset, 12, orphans=1)
 
             page = request.GET.get("page", 1)
 
             places = paginator.get_page(page)
 
-            page_numbers_range = 10
+            page_numbers_range = 7
 
             max_index = len(paginator.page_range)
 
@@ -166,6 +178,7 @@ class SearchView(ListView):
                     "places": places,
                     "page_range": page_range,
                     "word": word,
+                    "cat_type": cat_type,
                     "locations": locations,
                 },
             )

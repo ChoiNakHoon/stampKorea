@@ -39,9 +39,9 @@
           </a>
           <div class="absolute ml-32 flex items-center w-full" id="search_bar">
             <form method="GET" action="{% url 'places:search' %}" class="autocomplete w-1/4" id="search" onload="init()" autocomplete="off">
-                <input 
-                class="search-box border px-5 py-3 w-full rounded-md shadow-md hover:shadow-lg text-sm font-semibold placeholder-gray-400 focus:outline-none"
-                name="search" placeholder="Search By Trip" id="autoInput">
+              <input 
+              class="search-box border px-5 py-3 w-full shadow-md hover:shadow-lg text-sm font-semibold placeholder-gray-400 focus:outline-none uppercase"
+              name="search" placeholder='Search By Trip' id="autoInput">
             </form>
           </div>  
           {% endblock search-bar %}
