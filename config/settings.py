@@ -25,7 +25,7 @@ SECRET_KEY = "7v(44&wciyv1c-e*lu44q2&i!=)20l@5$+(y9qa7%ed75axf03"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["13.209.98.233"]
 
 
 # Django Application definition
